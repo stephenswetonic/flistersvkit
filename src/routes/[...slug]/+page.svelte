@@ -269,7 +269,7 @@
       >
   
       <div slot="item" let:item={item} let:label={label} class="flex flex-row">
-        <img src="{item.Poster}" alt="thumbnail" style="max-width: 200px; height: auto;">
+        <img src="{item.Poster}" alt="thumbnail" style="max-width: 100px; height: auto;">
         <div class="text-white pl-6 text-lg font-medium">{@html label}</div>
         
       </div>
@@ -346,10 +346,11 @@
   
     .autocomplete-wrapper :global(.autocomplete) {
       width: 500px;
+
     }
   
     .autocomplete-wrapper :global(.autocomplete-list) {
-      max-height: 100px;
+      max-height: 500px;
       --tw-bg-opacity: 1;
       background-color: rgb(31 41 55 / var(--tw-bg-opacity));
     }
