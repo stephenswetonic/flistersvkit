@@ -1,6 +1,6 @@
 <script>
   import "../app.postcss";
-  import { currentUser } from "$lib/pocketbase";
+  export let data;
 </script>
 
 <div class="min-h-full">
@@ -9,7 +9,7 @@
       <a href="/" class="btn btn-ghost normal-case text-xl">Flister</a>
     </div>
     <div class="flex-none">
-      {#if ! $currentUser}
+      {#if ! data.user}
         <div class="dropdown dropdown-end">
           <a href="/login" class="btn btn-primary">Login</a>
           <a href="/register" class="btn btn-primary">Register</a>
@@ -19,7 +19,7 @@
         <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
         <!-- svelte-ignore a11y-label-has-associated-control -->
         <label tabindex="0" class="btn btn-ghost">
-          {$currentUser.username}
+          {data.user.username}
         </label>
         <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
         <ul
