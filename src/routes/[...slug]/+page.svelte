@@ -126,6 +126,7 @@
     // Adds movie from search box to ui
     async function addMovieToList() {
       // Getting high res poster
+      console.log(selectedMovie);
       const url = "http://img.omdbapi.com/?i=" + selectedMovie.imdbID + '&h=2000' + '&apikey=5db6accd';
       const response = await fetch(url);
   
@@ -181,10 +182,12 @@
   
     // Gets search suggestions from OMDB
     async function getSearchItems(keyword) {
-      const url = "http://www.omdbapi.com/?s=" + encodeURI(keyword) + '&apikey=5db6accd';
-      const response = await fetch(url)
-      const json = await response.json()
-      return json.Search
+        const url = "http://www.omdbapi.com/?s=" + encodeURI(keyword) + '&apikey=5db6accd';
+        const response = await fetch(url)
+        const json = await response.json()
+
+        return json.Search
+
     }
   
     // Adds movies from a playlist to the ui
@@ -194,6 +197,14 @@
       }
       hovering = movieList.length;
     };
+
+    function autoBeforeChange() {
+        console.log(selectedMovie);
+    }
+
+    function autoOnChange() {
+        console.log(selectedMovie);
+    }
   
     // If loading a playlist that already exists, 
     // fill the ui with that data. Otherwise start in 
@@ -261,6 +272,7 @@
       delay="0"
       localFiltering={false}
       showLoadingIndicator={true}
+      matchAllKeywords={false}
       labelFieldName="Title"
       valueFieldName="imdbID"
       bind:selectedItem="{selectedMovie}"
@@ -268,11 +280,10 @@
       class="w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring-blue-500 focus:border-blue-500 hover:ring-blue-500 hover:border-blue-500 "
       >
   
-      <div slot="item" let:item={item} let:label={label} class="flex flex-row">
+    <div slot="item" let:item={item} let:label={label} class="flex flex-row">
         <img src="{item.Poster}" alt="thumbnail" style="max-width: 100px; height: auto;">
         <div class="text-white pl-6 text-lg font-medium">{@html label}</div>
-        
-      </div>
+    </div>
   
     </AutoComplete>
   

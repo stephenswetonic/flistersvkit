@@ -3,16 +3,16 @@
     import { page } from '$app/stores';
     import { currentUser, pb } from '$lib/pocketbase';
     import type { PageData } from './$types';
+    import { fade } from 'svelte/transition';
+    import { Email, Reddit, Telegram, Tumblr, Facebook, Twitter } from 'svelte-share-buttons-component';
 
     export let data: PageData;
-
     const userId = $page.params.userId;
     let playlists = data.playlists;
-    let inNewPlaylist = false;
-    let editing = false;
-    let selectedPlaylist : any;
+    let linkCopiedAlert = false;
 
-
+    const url = $page.url;
+	const title = data.user.name + '\'s Flister Profile';
 
     function newPlaylist() {
         routeToPage((`${userId}/new`), false);
@@ -40,6 +40,16 @@
 
     function signOut() {
         pb.authStore.clear();
+    }
+
+    function showLinkCopiedAlert() {
+        linkCopiedAlert = true;
+        setTimeout(hideLinkCopiedAlert, 3000);
+        
+    }
+
+    function hideLinkCopiedAlert() {
+        linkCopiedAlert = false;
     }
 
     //getPlaylists();
@@ -89,6 +99,8 @@
         <button on:click={newPlaylist} class="float-left bg-gray-800 border-0 py-1 px-3 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0">New Playlist</button>
         {/if}
 
+        <label for="my-modal-3" class="btn">open modal</label>
+
         <div class="flex flex-wrap -m-4">
             
             {#each playlists as playlist}
@@ -113,4 +125,28 @@
         </div> 
     </div>
 </section>
+
+<input type="checkbox" id="my-modal-3" class="modal-toggle" />
+<div class="modal">
+  <div class="modal-box relative">
+    <label for="my-modal-3" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+    <Email subject="{title}" body="{url} {url}" />
+    <Reddit class="share-button" {title} {url} />
+    <Tumblr class="share-button" {title} {url} caption="{title}" />
+    <Telegram class="share-button" text={title} {url} />
+    <Facebook class="share-button" quote="{title}" {url} />
+    <Twitter class="share-button" text="{title}" {url} hashtags="flister" via="username" related="other,users" />
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <label for="" class="btn" on:click={showLinkCopiedAlert}>Copy link</label>
+
+    {#if linkCopiedAlert}
+    <div in:fade="{{ duration: 1000 }}" out:fade class="alert alert-success shadow-lg">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <span>Link copied to clipboard!</span>
+        </div>
+      </div>
+    {/if}
+  </div>
+</div>
 
