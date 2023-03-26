@@ -7,7 +7,7 @@ export const actions = {
 
         try {
             await locals.pb.collection('users').create({...body});
-            //await locals.pb.collection('users').requestVerification(body.email.toString());
+            await locals.pb.collection('users').requestVerification(body.email.toString());
         } catch(err) {
             console.log(err);
             throw error(500, 'Something went wrong');
