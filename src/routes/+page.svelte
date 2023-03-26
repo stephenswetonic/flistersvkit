@@ -11,7 +11,7 @@
     if(data.user) {
       console.log(data.user.id);
       let url = '/profile/' + data.user.id;
-      routeToPage(url, false);
+      //routeToPage(url, false);
     }
 
 </script>
