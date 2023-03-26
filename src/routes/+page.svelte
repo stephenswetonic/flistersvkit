@@ -1,19 +1,20 @@
 <script lang="ts">
-    import { currentUser, pb } from '$lib/pocketbase';
     import { goto } from '$app/navigation';
+    import { redirect } from "@sveltejs/kit";
 
-  
-    let username: string;
-    let password: string;
-  
-    async function login() {
-      const user = await pb.collection('users').authWithPassword(username, password);
-      routeToPage(('profile/' + user.record.id), true);
-    }
+    export let data;
 
     function routeToPage(route: string, replaceState: boolean) {
       goto(`/${route}`, { replaceState }) 
     }
-  
-  </script>
+
+    if(data.user) {
+      console.log(data.user.id);
+      let url = '/profile/' + data.user.id;
+      routeToPage(url, false);
+    }
+
+</script>
+
+ 
 
