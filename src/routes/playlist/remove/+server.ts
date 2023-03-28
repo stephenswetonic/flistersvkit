@@ -3,7 +3,6 @@ import type { RequestHandler } from './$types';
 
 export const DELETE = (async ({ request, locals }) => {
     const { moviesToDelete, playlistId } = await request.json();
-    console.log(moviesToDelete);
     for (let i = 0; i < moviesToDelete.length; i++) {
         try {
             await locals.pb.collection('movies').delete(moviesToDelete[i].recordid);

@@ -23,7 +23,6 @@
     let playlistId = slugArr[1];
 
     async function addPlaylist() {
-      console.log(movieList);
         const response = await fetch('/playlist/add', {
         method: 'POST',
         body: JSON.stringify({ movieList, playlistName, creating, playlistId }),
@@ -87,7 +86,6 @@
     // Adds movie from search box to ui
     async function addMovieToList() {
       // Getting high res poster
-      console.log(selectedMovie);
       const url = "http://img.omdbapi.com/?i=" + selectedMovie.imdbID + '&h=2000' + '&apikey=5db6accd';
       const response = await fetch(url);
   
@@ -176,7 +174,7 @@
         playlistName = data.playlist.name;
         viewing = true;
     } else {
-        console.log('creating and draggable true');
+
         creating = true;
         draggable = true;
     }

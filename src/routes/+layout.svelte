@@ -19,7 +19,7 @@
         <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
         <!-- svelte-ignore a11y-label-has-associated-control -->
         <label tabindex="0" class="btn btn-ghost">
-          {data.user.username}
+          {data.user.name}
         </label>
         <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
         <ul

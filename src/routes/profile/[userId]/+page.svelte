@@ -6,25 +6,18 @@
     import { fade } from 'svelte/transition';
     import { Email, Reddit, Telegram, Tumblr, Facebook, Twitter } from 'svelte-share-buttons-component';
 
-    //export let pageData: PageData;
+    //From +page.server.ts
     export let data;
-    //console.log(data);
 
     const userId = $page.params.userId;
     let playlists = data.playlists;
     let linkCopiedAlert = false;
-
     const url = $page.url;
 	const title = data.user.name + '\'s Flister Profile';
-
-    console.log(data.user)
-    console.log(playlists)
 
     function newPlaylist() {
         routeToPage((`playlist/${userId}/new`), false);
     };
-
-
 
     function selectPlaylist(playlist) {
         routeToPage((`playlist/${userId}/${playlist.id}`), false);
@@ -44,7 +37,6 @@
         location.reload();
     }
 
-
     function showLinkCopiedAlert() {
         linkCopiedAlert = true;
         setTimeout(hideLinkCopiedAlert, 3000);
@@ -57,40 +49,38 @@
 
 </script>
 
+<div class="container px-2 py-10 mx-auto">
+    <h1 class="text-center text-4xl tracking-wide mb-10">My Playlists</h1>
 
-    
-    <div class="container px-2 py-10 mx-auto">
-        <h1 class="text-center text-4xl tracking-wide mb-10">My Playlists</h1>
+    {#if data.user}
+    <button on:click={newPlaylist} class="float-left bg-gray-800 border-0 py-1 px-3 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0">New Playlist</button>
+    {/if}
 
-        {#if data.user}
-        <button on:click={newPlaylist} class="float-left bg-gray-800 border-0 py-1 px-3 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0">New Playlist</button>
-        {/if}
+    <label for="my-modal-3" class="btn">Share</label>
 
-        <label for="my-modal-3" class="btn">open modal</label>
-
-        <div class="flex flex-wrap -m-4">
-            
-            {#each playlists as playlist}
-            
-                <div class="xl:w-1/4 md:w-1/2 p-4">
-                    <div on:click={() => selectPlaylist(playlist)} on:keypress={() => selectPlaylist(playlist)} class="bg-gray-800 bg-opacity-40 p-6 rounded-lg cursor-pointer">
-                        <img class="h-full rounded w-full object-cover object-center mb-6" src="https://dummyimage.com/300x400" alt="content">
-                        <h2 class="text-lg text-white font-medium title-font mb-4">{playlist.name}</h2>
-                        <p class="leading-relaxed text-base">Description</p>
-                    </div>
-                </div>
+    <div class="flex flex-wrap -m-4">
         
+        {#each playlists as playlist}
+        
+            <div class="xl:w-1/4 md:w-1/2 p-4">
+                <div on:click={() => selectPlaylist(playlist)} on:keypress={() => selectPlaylist(playlist)} class="bg-gray-800 bg-opacity-40 p-6 rounded-lg cursor-pointer">
+                    <img class="h-full rounded w-full object-cover object-center mb-6" src="https://dummyimage.com/300x400" alt="content">
+                    <h2 class="text-lg text-white font-medium title-font mb-4">{playlist.name}</h2>
+                    <p class="leading-relaxed text-base">Description</p>
+                </div>
+            </div>
+    
 
-                <!-- <a href="#" on:click={() => selectPlaylist(playlist)}>
-                    <div class="playlist-item">{playlist.name}</div>
-                </a>
-                <a href="#" on:click={() => deletePlaylist(playlist)}>
-                    <img src="src/assets/closebutton.svg" alt="close">
-                </a> -->
+            <!-- <a href="#" on:click={() => selectPlaylist(playlist)}>
+                <div class="playlist-item">{playlist.name}</div>
+            </a>
+            <a href="#" on:click={() => deletePlaylist(playlist)}>
+                <img src="src/assets/closebutton.svg" alt="close">
+            </a> -->
 
-            {/each}
-        </div> 
-    </div>
+        {/each}
+    </div> 
+</div>
 
 <input type="checkbox" id="my-modal-3" class="modal-toggle" />
 <div class="modal">
