@@ -1,7 +1,7 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
     import { page } from '$app/stores';
-    import { currentUser, pb } from '$lib/pocketbase';
+    import { pb } from '$lib/pocketbase';
     import type { PageData } from './$types';
     import {flip} from 'svelte/animate';
     import {fly} from 'svelte/transition';
@@ -17,66 +17,90 @@
     let editing = false;
     let creating = false;
     let viewing = false;
-    //export let leavePlaylist = () => {} 
 
     export let data: PageData;
     const slugArr = $page.params.slug.split('/');
+    let playlistId = slugArr[1];
 
     // Creates or updates a playlist record
-    async function submitPlaylist() {
-      try {
-        const record = {
-            "name": playlistName,
-            "user": $currentUser.id
-        };
-        if (creating) {
-          console.log("playlist created")
-          const createdPlaylist = await pb.collection('playlists').create(record);
-          createMovies(createdPlaylist.id);
-        } else {
-          console.log(data.playlist);    
-          const updatedPlaylist = await pb.collection('playlists').update(data.playlist.id, record);
-          createMovies(data.playlist.id);
+    // async function submitPlaylist() {
+    //   console.log(movieList);
+    
+
+    //   try {
+    //     const record = {
+    //         "name": playlistName,
+    //         "user": data.user.id
+    //     };
+    //     if (creating) {
+    //       console.log("playlist created")
+    //       const createdPlaylist = await pb.collection('playlists').create(record);
+    //       createMovies(createdPlaylist.id);
+    //     } else {
+    //       console.log(data.playlist);    
+    //       const updatedPlaylist = await pb.collection('playlists').update(data.playlist.id, record);
+    //       createMovies(data.playlist.id);
+    //     }
+  
+    //   } catch(err) {
+    //       console.log(err);
+    //   }
+  
+  
+    // };
+
+    async function addPlaylist() {
+      console.log(movieList);
+        const response = await fetch('/playlist/add', {
+        method: 'POST',
+        body: JSON.stringify({ movieList, playlistName, creating, playlistId }),
+        headers: {
+          'content-type': 'application/json'
         }
-  
-      } catch(err) {
-          console.log(err);
-      }
-  
-  
-    };
-  
-    // Creates movie records, either updating or 
-    // creating them.
-    async function createMovies(playlistId) {
-      for (var i = 0; i < movieList.length; i++) {
-        const record = {
-          "title": movieList[i].title,
-          "rank": i+1,
-          "playlist": playlistId,
-          "imdbid": movieList[i].imdbid,
-          "poster": movieList[i].img
-        };
-        if (movieList[i].isNew) {
-          const createdMovie = await pb.collection('movies').create(record);
-          movieList[i].recordid = createdMovie.id;
-          console.log(record);
-        } else {
-          console.log('updated record')
-          console.log(movieList[i].recordid);
-          const createdMovie = await pb.collection('movies').update(movieList[i].recordid, record);
-        }
-        routeToPage(`${data.user.id}/${playlistId}`, true);
-        
-  
-      }
+      });
+
+      playlistId = await response.json();
       creating = false
       editing = false;
       draggable = false;
       viewing = true;
-      //Update isNew in movieList because we are creating/updating it
       changeIsNewState();
-    };
+        
+    }
+
+    
+  
+    // Creates movie records, either updating or 
+    // creating them.
+    // async function createMovies(playlistId) {
+    //   for (var i = 0; i < movieList.length; i++) {
+    //     const record = {
+    //       "title": movieList[i].title,
+    //       "rank": i+1,
+    //       "playlist": playlistId,
+    //       "imdbid": movieList[i].imdbid,
+    //       "poster": movieList[i].img
+    //     };
+    //     if (movieList[i].isNew) {
+    //       const createdMovie = await data.pb.collection('movies').create(record);
+    //       movieList[i].recordid = createdMovie.id;
+    //       console.log(record);
+    //     } else {
+    //       console.log('updated record')
+    //       console.log(movieList[i].recordid);
+    //       const createdMovie = await data.pb.collection('movies').update(movieList[i].recordid, record);
+    //     }
+    //     routeToPage(`${data.user.id}/${playlistId}`, true);
+        
+  
+    //   }
+    //   creating = false
+    //   editing = false;
+    //   draggable = false;
+    //   viewing = true;
+    //   //Update isNew in movieList because we are creating/updating it
+    //   changeIsNewState();
+    // };
   
     // Sets ui movielist to reflect db state
     function changeIsNewState() {
@@ -197,14 +221,6 @@
       }
       hovering = movieList.length;
     };
-
-    function autoBeforeChange() {
-        console.log(selectedMovie);
-    }
-
-    function autoOnChange() {
-        console.log(selectedMovie);
-    }
   
     // If loading a playlist that already exists, 
     // fill the ui with that data. Otherwise start in 
@@ -214,6 +230,7 @@
         playlistName = data.playlist.name;
         viewing = true;
     } else {
+        console.log('creating and draggable true');
         creating = true;
         draggable = true;
     }
@@ -221,33 +238,8 @@
 
 
 </script>
-
-<header class="text-gray-400 bg-gray-900 body-font border-b-2">
-    <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
-        <a href="/" class="flex title-font font-medium items-center text-white mb-4 md:mb-0">
-        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-6 h-6">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M3.375 19.5h17.25m-17.25 0a1.125 1.125 0 01-1.125-1.125M3.375 19.5h1.5C5.496 19.5 6 18.996 6 18.375m-3.75 0V5.625m0 12.75v-1.5c0-.621.504-1.125 1.125-1.125m18.375 2.625V5.625m0 12.75c0 .621-.504 1.125-1.125 1.125m1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125m0 3.75h-1.5A1.125 1.125 0 0118 18.375M20.625 4.5H3.375m17.25 0c.621 0 1.125.504 1.125 1.125M20.625 4.5h-1.5C18.504 4.5 18 5.004 18 5.625m3.75 0v1.5c0 .621-.504 1.125-1.125 1.125M3.375 4.5c-.621 0-1.125.504-1.125 1.125M3.375 4.5h1.5C5.496 4.5 6 5.004 6 5.625m-3.75 0v1.5c0 .621.504 1.125 1.125 1.125m0 0h1.5m-1.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125m1.5-3.75C5.496 8.25 6 7.746 6 7.125v-1.5M4.875 8.25C5.496 8.25 6 8.754 6 9.375v1.5m0-5.25v5.25m0-5.25C6 5.004 6.504 4.5 7.125 4.5h9.75c.621 0 1.125.504 1.125 1.125m1.125 2.625h1.5m-1.5 0A1.125 1.125 0 0118 7.125v-1.5m1.125 2.625c-.621 0-1.125.504-1.125 1.125v1.5m2.625-2.625c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125M18 5.625v5.25M7.125 12h9.75m-9.75 0A1.125 1.125 0 016 10.875M7.125 12C6.504 12 6 12.504 6 13.125m0-2.25C6 11.496 5.496 12 4.875 12M18 10.875c0 .621-.504 1.125-1.125 1.125M18 10.875c0 .621.504 1.125 1.125 1.125m-2.25 0c.621 0 1.125.504 1.125 1.125m-12 5.25v-5.25m0 5.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125m-12 0v-1.5c0-.621-.504-1.125-1.125-1.125M18 18.375v-5.25m0 5.25v-1.5c0-.621.504-1.125 1.125-1.125M18 13.125v1.5c0 .621.504 1.125 1.125 1.125M18 13.125c0-.621.504-1.125 1.125-1.125M6 13.125v1.5c0 .621-.504 1.125-1.125 1.125M6 13.125C6 12.504 5.496 12 4.875 12m-1.5 0h1.5m-1.5 0c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125M19.125 12h1.5m0 0c.621 0 1.125.504 1.125 1.125v1.5c0 .621-.504 1.125-1.125 1.125m-17.25 0h1.5m14.25 0h1.5" />
-            </svg>
-            
-        <span class="ml-3 text-xl">Flister</span>
-        </a>
-        <nav class="md:ml-auto flex flex-wrap items-center text-base justify-center">
-
-        <a href="#" class="mr-5 hover:text-white">{data.user.name}</a>
-
-
-        </nav>
-
-        {#if $currentUser}
-        <button on:click={signOut} class="inline-flex items-center bg-gray-800 border-0 py-1 px-3 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0">Sign Out
-        </button>
-        {/if}
-    </div>
-</header>
-
-
   
-  <section class="text-gray-400 body-font bg-gray-900">
+<section class="text-gray-400 body-font bg-gray-900">
   
   {#if viewing}
     <div class="flex justify-center py-6">
@@ -300,15 +292,16 @@
       <div class="flex flex-wrap -m-4">
         <div class="flex flex-col">
           {#if editing}
-            <button class="bg-gray-800 border-0 py-1 px-3 my-5 mx-5 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0" on:click={submitPlaylist}>Save</button>
+            <button class="bg-gray-800 border-0 py-1 px-3 my-5 mx-5 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0" on:click={addPlaylist}>Save</button>
             <button class="bg-gray-800 border-0 py-1 px-3 my-5 mx-5 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0" on:click={cancelEdit}>Cancel</button>
           {/if}
   
           {#if creating}
-            <button class="bg-gray-800 border-0 py-1 px-3 my-5 mx-5 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0" on:click={submitPlaylist}>Create</button>
+            <button class="bg-gray-800 border-0 py-1 px-3 my-5 mx-5 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0" on:click={addPlaylist}>Create</button>
+
           {/if}
   
-          {#if viewing && $currentUser}
+          {#if viewing && data.user}
             <button class="bg-gray-800 border-0 py-1 px-3 my-5 mx-5 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0" on:click={startEditing}>Edit</button>
           {/if}
         <button class="bg-gray-800 border-0 py-1 px-3 my-5 mx-5 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0" on:click={goBack}>Back</button>

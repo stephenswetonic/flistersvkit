@@ -17,17 +17,17 @@
     const url = $page.url;
 	const title = data.user.name + '\'s Flister Profile';
 
-    
-
+    console.log(data.user)
+    console.log(playlists)
 
     function newPlaylist() {
-        routeToPage((`${userId}/new`), false);
+        routeToPage((`playlist/${userId}/new`), false);
     };
 
 
 
     function selectPlaylist(playlist) {
-        routeToPage((`${userId}/${playlist.id}`), false);
+        routeToPage((`playlist/${userId}/${playlist.id}`), false);
     }
 
     function routeToPage(route: string, replaceState: boolean) {
@@ -44,9 +44,6 @@
         location.reload();
     }
 
-    function signOut() {
-        pb.authStore.clear();
-    }
 
     function showLinkCopiedAlert() {
         linkCopiedAlert = true;

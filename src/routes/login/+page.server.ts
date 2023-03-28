@@ -18,10 +18,6 @@ export const actions = {
             throw error(500, 'Something went wrong');
         }
         
-        //console.log(locals.user.id);
-        console.log(locals.pb.authStore.model.id);
         throw redirect(303, ('profile/' + locals.pb.authStore.model.id));
-        //throw redirect(303, '/');
-        
     }
 }
