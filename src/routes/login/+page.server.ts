@@ -25,7 +25,9 @@ export const actions: Actions = {
             }
         } catch(err) {
             console.log(err);
-            throw error(500, 'Something went wrong');
+            return {
+                invalid: true
+            }
         }
         
         throw redirect(303, ('profile/' + locals.pb.authStore.model.id));
