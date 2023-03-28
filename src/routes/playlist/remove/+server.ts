@@ -11,6 +11,5 @@ export const DELETE = (async ({ request, locals }) => {
             return json({success : false});
         }
     }
-
     return json({success : true});
   }) satisfies RequestHandler;

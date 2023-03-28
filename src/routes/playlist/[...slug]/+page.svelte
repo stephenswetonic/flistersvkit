@@ -174,13 +174,9 @@
         playlistName = data.playlist.name;
         viewing = true;
     } else {
-
         creating = true;
         draggable = true;
     }
-    
-
-
 </script>
   
 <section class="text-gray-400 body-font bg-gray-900">

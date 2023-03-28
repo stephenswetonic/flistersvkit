@@ -1,11 +1,21 @@
-import { error, redirect } from "@sveltejs/kit";
+import { error, fail, redirect } from "@sveltejs/kit";
+import { validateData } from "$lib/utils";
+import { loginUserSchema } from "$lib/schemas";
+import type { Actions, PageServerLoad } from './$types';
 
-export const actions = {
+export const actions: Actions = {
     login: async ({ request, locals}) => {
-        const body = Object.fromEntries(await request.formData());
+        const { formData, errors } = await validateData(await request.formData(), loginUserSchema);
+
+        if (errors) {
+            return fail(400, {
+                data: formData,
+                errors: errors.fieldErrors
+            });
+        }
 
         try {
-            await locals.pb.collection('users').authWithPassword(body.email.toString(), body.password.toString());
+            await locals.pb.collection('users').authWithPassword(formData.email, formData.password);
             
             if (!locals.pb?.authStore?.model?.verified) {
                 locals.pb.authStore.clear();
