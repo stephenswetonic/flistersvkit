@@ -65,6 +65,8 @@
       draggable = false;
       viewing = true;
       changeIsNewState();
+
+      deleteMovies();
         
     }
 
@@ -181,7 +183,7 @@
   
     // Removes a movie from the ui and deletes the record,
     // if it exists
-    async function removeMovieFromList(movieIndex) {
+    function removeMovieFromList(movieIndex) {
       // Templist is for new ui list
       let tempList = []
       for (var i = 0; i < movieList.length; i++) {
@@ -189,11 +191,7 @@
         if (i == movieIndex) {
           // Only delete if record exists
           if (!movieList[i].isNew) {
-            try {
-              await pb.collection('movies').delete(movieList[i].recordid);
-            } catch (error) {
-              console.log(error);
-            }
+            moviesToDelete.push(movieList[i]);
           }
         } else {
           // Add all except one to delete
@@ -202,6 +200,19 @@
       }
       movieList = tempList;
       hovering = movieList.length;
+    }
+
+    async function deleteMovies() {
+      const response = await fetch('/playlist/remove', {
+        method: 'DELETE',
+        body: JSON.stringify({ moviesToDelete, playlistId }),
+        headers: {
+          'content-type': 'application/json'
+        }
+      });
+
+      await response.json();
+
     }
   
     // Gets search suggestions from OMDB
