@@ -22,33 +22,6 @@
     const slugArr = $page.params.slug.split('/');
     let playlistId = slugArr[1];
 
-    // Creates or updates a playlist record
-    // async function submitPlaylist() {
-    //   console.log(movieList);
-    
-
-    //   try {
-    //     const record = {
-    //         "name": playlistName,
-    //         "user": data.user.id
-    //     };
-    //     if (creating) {
-    //       console.log("playlist created")
-    //       const createdPlaylist = await pb.collection('playlists').create(record);
-    //       createMovies(createdPlaylist.id);
-    //     } else {
-    //       console.log(data.playlist);    
-    //       const updatedPlaylist = await pb.collection('playlists').update(data.playlist.id, record);
-    //       createMovies(data.playlist.id);
-    //     }
-  
-    //   } catch(err) {
-    //       console.log(err);
-    //   }
-  
-  
-    // };
-
     async function addPlaylist() {
       console.log(movieList);
         const response = await fetch('/playlist/add', {
@@ -69,40 +42,6 @@
       deleteMovies();
         
     }
-
-    
-  
-    // Creates movie records, either updating or 
-    // creating them.
-    // async function createMovies(playlistId) {
-    //   for (var i = 0; i < movieList.length; i++) {
-    //     const record = {
-    //       "title": movieList[i].title,
-    //       "rank": i+1,
-    //       "playlist": playlistId,
-    //       "imdbid": movieList[i].imdbid,
-    //       "poster": movieList[i].img
-    //     };
-    //     if (movieList[i].isNew) {
-    //       const createdMovie = await data.pb.collection('movies').create(record);
-    //       movieList[i].recordid = createdMovie.id;
-    //       console.log(record);
-    //     } else {
-    //       console.log('updated record')
-    //       console.log(movieList[i].recordid);
-    //       const createdMovie = await data.pb.collection('movies').update(movieList[i].recordid, record);
-    //     }
-    //     routeToPage(`${data.user.id}/${playlistId}`, true);
-        
-  
-    //   }
-    //   creating = false
-    //   editing = false;
-    //   draggable = false;
-    //   viewing = true;
-    //   //Update isNew in movieList because we are creating/updating it
-    //   changeIsNewState();
-    // };
   
     // Sets ui movielist to reflect db state
     function changeIsNewState() {
@@ -114,10 +53,6 @@
     // Routing
     function routeToPage(route: string, replaceState: boolean) {
       goto(`/${route}`, { replaceState }) 
-    }
-
-    function signOut() {
-        pb.authStore.clear();
     }
 
     function goBack() {
