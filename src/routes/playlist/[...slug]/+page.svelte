@@ -22,6 +22,8 @@
     const slugArr = $page.params.slug.split('/');
     let playlistId = slugArr[1];
 
+    let posterWidth = 25;
+
     async function addPlaylist() {
         const response = await fetch('/playlist/add', {
         method: 'POST',
@@ -93,7 +95,7 @@
       // isNew is true so the record is created.
       movieList.push({"recordid" : "","title" : selectedMovie.Title, "id" : movieList.length, "img": response.url, "imdbid" : selectedMovie.imdbID, "isNew" : true});
       hovering = movieList.length;
-  
+      updatePosterWidth();
     }
   
     // Edit button clicked
@@ -113,6 +115,7 @@
       viewing = true;
       playlistName = data.playlist.name;
       movieList = [];
+      updatePosterWidth();
       addMoviesToList();
     }
   
@@ -166,7 +169,26 @@
         movieList.push({"recordid" : data.movies[i].id, "title" : data.movies[i].title, "id" : data.movies[i].rank-1, "img": data.movies[i].poster, "imdbid" : data.movies[i].imdbid, "isNew" : false})
       }
       hovering = movieList.length;
+      
     };
+
+    function updatePosterWidth() {
+      if (movieList.length > 5) {
+        posterWidth = 20;
+      }
+      else if (movieList.length > 10) {
+        posterWidth = 15;
+      }
+      else if (movieList.length > 18) {
+        posterWidth = 12;
+      }
+      else if (movieList.length > 32) {
+        posterWidth = 10;
+      } else {
+        posterWidth = 25;
+      }
+
+    }
   
     // If loading a playlist that already exists, 
     // fill the ui with that data. Otherwise start in 
@@ -248,7 +270,7 @@
   </div>
 </div>
 
-  <section class="text-gray-400 bg-gray-900">
+
     <div class="container mx-auto px-5 py-2 lg:px-32 lg:pt-12">
   
       
@@ -257,7 +279,8 @@
         {#each movieList as n, index  (n.id)}
           <div
             id="list-item"
-            class="flex w-1/6 flex-wrap" 
+            class="flex flex-wrap"
+            style="width: {posterWidth}%;"
             animate:flip="{{duration: 500}}"
             draggable={draggable} 
             on:dragstart={event => dragstart(event, index)}
@@ -269,7 +292,7 @@
             in:fly={{x : 500, duration : 500}}
             >
 
-            <div class="w-full p-1 md:p-2">
+            <div class="w-full p-1">
               <img src="{n.img}" 
                 alt="thumb" 
                 draggable={false}
@@ -282,17 +305,19 @@
                   <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.207 6.207a1 1 0 0 0-1.414-1.414L12 10.586 6.207 4.793a1 1 0 0 0-1.414 1.414L10.586 12l-5.793 5.793a1 1 0 1 0 1.414 1.414L12 13.414l5.793 5.793a1 1 0 0 0 1.414-1.414L13.414 12l5.793-5.793z" fill="#ff0000"/></svg>
               </a>
             {/if}
-              <p class="font-bold text-md"> {n.title}	{index+1}</p>
+              <p class="font-bold text-sm"> {index+1}</p>
             
           </div>
         {/each}
       </div>
     </div>
 
-</section>
+
 
   
   <style>
+
+
     #list-item.is-active {
       background-color: #3273dc;
       color: #fff;
