@@ -112,6 +112,8 @@
       draggable = false;
       viewing = true;
       playlistName = data.playlist.name;
+      movieList = [];
+      addMoviesToList();
     }
   
     // Removes a movie from the ui and deletes the record,
@@ -223,63 +225,71 @@
   <button type="submit" on:click={addMovieToList} class="text-white m-2 focus:ring-4 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add</button>
   </div>
   {/if}
-  
   </section>
-  
-  <section class="text-gray-400 body-font bg-gray-900 h-screen">
-    <div class="container px-5 py-24 mx-auto">
-  
-      <div class="flex flex-wrap -m-4">
-        <div class="flex flex-col">
-          {#if editing}
-            <button class="bg-gray-800 border-0 py-1 px-3 my-5 mx-5 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0" on:click={addPlaylist}>Save</button>
-            <button class="bg-gray-800 border-0 py-1 px-3 my-5 mx-5 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0" on:click={cancelEdit}>Cancel</button>
-          {/if}
-  
-          {#if creating}
-            <button class="bg-gray-800 border-0 py-1 px-3 my-5 mx-5 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0" on:click={addPlaylist}>Create</button>
 
-          {/if}
-  
-          {#if viewing && data.user}
-            <button class="bg-gray-800 border-0 py-1 px-3 my-5 mx-5 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0" on:click={startEditing}>Edit</button>
-          {/if}
+<div class="absolute">
+  <div class="flex flex-wrap -m-4">
+    <div class="flex flex-col">
+      {#if editing}
+        <button class="bg-gray-800 border-0 py-1 px-3 my-5 mx-5 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0" on:click={addPlaylist}>Save</button>
+        <button class="bg-gray-800 border-0 py-1 px-3 my-5 mx-5 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0" on:click={cancelEdit}>Cancel</button>
+      {/if}
+
+      {#if creating}
+        <button class="bg-gray-800 border-0 py-1 px-3 my-5 mx-5 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0" on:click={addPlaylist}>Create</button>
+
+      {/if}
+
+      {#if viewing && data.user}
+        <button class="bg-gray-800 border-0 py-1 px-3 my-5 mx-5 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0" on:click={startEditing}>Edit</button>
+      {/if}
         <button class="bg-gray-800 border-0 py-1 px-3 my-5 mx-5 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0" on:click={goBack}>Back</button>
-      </div>
-      {#each movieList as n, index  (n.id)}
-        <div
-          id="list-item"
-          class="bg-gray-800 bg-opacity-40 p-6 xl:w-1/4 md:w-1/2" 
-           animate:flip="{{duration: 500}}"
-           draggable={draggable} 
-           on:dragstart={event => dragstart(event, index)}
-           on:drop|preventDefault={event => drop(event, index)}
-           ondragover="return false"
-           on:dragenter={() => hovering = index}
-           class:is-active={hovering === index}
-           out:fly={{x : -500, duration : 500}}
-           in:fly={{x : 500, duration : 500}}
-           >
+    </div>
+  </div>
+</div>
+
+  <section class="text-gray-400 bg-gray-900">
+    <div class="container mx-auto px-5 py-2 lg:px-32 lg:pt-12">
   
-           <img src="{n.img}" 
-            alt="thumb" 
-            draggable={false}
-            class="h-[400px] mx-auto mb-4"
+      
+
+      <div class="-m-1 flex flex-wrap md:-m-2">
+        {#each movieList as n, index  (n.id)}
+          <div
+            id="list-item"
+            class="flex w-1/6 flex-wrap" 
+            animate:flip="{{duration: 500}}"
+            draggable={draggable} 
+            on:dragstart={event => dragstart(event, index)}
+            on:drop|preventDefault={event => drop(event, index)}
+            ondragover="return false"
+            on:dragenter={() => hovering = index}
+            class:is-active={hovering === index}
+            out:fly={{x : -500, duration : 500}}
+            in:fly={{x : 500, duration : 500}}
             >
-  
-          {#if editing || creating}
-            <a href="#" on:click={() => removeMovieFromList(index)}>
-                <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.207 6.207a1 1 0 0 0-1.414-1.414L12 10.586 6.207 4.793a1 1 0 0 0-1.414 1.414L10.586 12l-5.793 5.793a1 1 0 1 0 1.414 1.414L12 13.414l5.793 5.793a1 1 0 0 0 1.414-1.414L13.414 12l5.793-5.793z" fill="#ff0000"/></svg>
-            </a>
-          {/if}
-            <p class="font-bold text-xl"> {n.title}	{index+1}</p>
-           
-        </div>
-      {/each}
-  
+
+            <div class="w-full p-1 md:p-2">
+              <img src="{n.img}" 
+                alt="thumb" 
+                draggable={false}
+                class="block h-full w-full rounded-lg object-cover object-center"
+                >
+            </div>
+
+            {#if editing || creating}
+              <a href="#" on:click={() => removeMovieFromList(index)}>
+                  <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.207 6.207a1 1 0 0 0-1.414-1.414L12 10.586 6.207 4.793a1 1 0 0 0-1.414 1.414L10.586 12l-5.793 5.793a1 1 0 1 0 1.414 1.414L12 13.414l5.793 5.793a1 1 0 0 0 1.414-1.414L13.414 12l5.793-5.793z" fill="#ff0000"/></svg>
+              </a>
+            {/if}
+              <p class="font-bold text-md"> {n.title}	{index+1}</p>
+            
+          </div>
+        {/each}
       </div>
     </div>
-  </section>
+
+</section>
 
   
   <style>
