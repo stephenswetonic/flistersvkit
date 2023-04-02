@@ -173,21 +173,21 @@
     };
 
     function updatePosterWidth() {
-      if (movieList.length > 5) {
-        posterWidth = 20;
-      }
-      else if (movieList.length > 10) {
-        posterWidth = 15;
-      }
-      else if (movieList.length > 18) {
-        posterWidth = 12;
-      }
-      else if (movieList.length > 32) {
-        posterWidth = 10;
-      } else {
+      if (movieList.length < 5) {
         posterWidth = 25;
       }
-
+      if (movieList.length > 4) {
+        posterWidth = 20;
+      }
+      if (movieList.length > 10) {
+        posterWidth = 15;
+      }
+      if (movieList.length > 18) {
+        posterWidth = 12;
+      }
+      if (movieList.length > 32) {
+        posterWidth = 10;
+      }
     }
   
     // If loading a playlist that already exists, 
@@ -212,7 +212,7 @@
   {/if}
   
   {#if creating || editing}
-    <form on:submit|preventDefault class="flex justify-center py-6">
+    <form on:submit|preventDefault class="flex justify-center py-1">
       <input
         placeholder="Playlist Name"
         type="text"

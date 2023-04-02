@@ -18,8 +18,12 @@ export const actions = {
             await locals.pb.collection('users').create({...formData});
             await locals.pb.collection('users').requestVerification(formData.email.toString());
         } catch(err) {
-            console.log(err);
-            throw error(500, 'Something went wrong');
+            console.log('caught error')
+            console.log(err.response)
+            return {
+                invalid: true,
+                error: err.response.data
+            }
         }
         throw redirect(303, '/login')
     }
