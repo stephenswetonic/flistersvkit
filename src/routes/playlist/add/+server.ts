@@ -1,7 +1,7 @@
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
 
-async function createMovies(playlistId, movieList, pb) {
+async function createMovies(playlistId : string, movieList, pb) {
   for (var i = 0; i < movieList.length; i++) {
     const record = {
       "title": movieList[i].title,
@@ -23,7 +23,7 @@ async function createMovies(playlistId, movieList, pb) {
  
 export const POST = (async ({ request, locals }) => {
   const { movieList, playlistName, creating, playlistId } = await request.json();
-  let newPlaylistId;
+  let newPlaylistId : string;
   try {
     const record = {
         "name": playlistName,
@@ -31,15 +31,16 @@ export const POST = (async ({ request, locals }) => {
     };
     if (creating) {
       const createdPlaylist = await locals.pb.collection('playlists').create(record);
-      newPlaylistId = createMovies(createdPlaylist.id, movieList, locals.pb);
+      newPlaylistId = await createMovies(createdPlaylist.id, movieList, locals.pb);
     } else {  
       const updatedPlaylist = await locals.pb.collection('playlists').update(playlistId, record);
-      newPlaylistId = createMovies(playlistId, movieList, locals.pb);
+      newPlaylistId = await createMovies(playlistId, movieList, locals.pb);
     }
 
   } catch(err) {
       console.log(err);
   }
 
-  return json(newPlaylistId);
+  console.log(newPlaylistId);
+  return json({playlistId: newPlaylistId});
 }) satisfies RequestHandler;

@@ -1,7 +1,7 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
     import { page } from '$app/stores';
-    import { pb } from '$lib/pocketbase';
+
     import type { PageData } from './$types';
     import { fade } from 'svelte/transition';
     import { Email, Reddit, Telegram, Tumblr, Facebook, Twitter } from 'svelte-share-buttons-component';
@@ -27,15 +27,15 @@
       goto(`/${route}`, { replaceState }) 
     }
 
-    async function deletePlaylist(playlist) {
-        console.log(playlist);
-        let moviesInPlaylist = await pb.collection('movies').getFullList(50, { filter: `playlist="${playlist.id}"`});
-        for (let i = 0; i < moviesInPlaylist.length; i++) {
-            await pb.collection('movies').delete(moviesInPlaylist[i].id);
-        }
-        await pb.collection('playlists').delete(playlist.id);
-        location.reload();
-    }
+    // async function deletePlaylist(playlist) {
+    //     console.log(playlist);
+    //     let moviesInPlaylist = await pb.collection('movies').getFullList(50, { filter: `playlist="${playlist.id}"`});
+    //     for (let i = 0; i < moviesInPlaylist.length; i++) {
+    //         await pb.collection('movies').delete(moviesInPlaylist[i].id);
+    //     }
+    //     await pb.collection('playlists').delete(playlist.id);
+    //     location.reload();
+    // }
 
     function showLinkCopiedAlert() {
         linkCopiedAlert = true;

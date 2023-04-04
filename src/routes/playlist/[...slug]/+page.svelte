@@ -1,11 +1,11 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
     import { page } from '$app/stores';
-    import { pb } from '$lib/pocketbase';
     import type { PageData } from './$types';
     import {flip} from 'svelte/animate';
     import {fly} from 'svelte/transition';
     import AutoComplete from "simple-svelte-autocomplete"
+    import Image from '$lib/components/Image.svelte';
 
     let playlistName : string;
     let hovering : any = false;
@@ -33,14 +33,15 @@
         }
       });
 
-      playlistId = await response.json();
+      let addresponse = await response.json();
+      playlistId = addresponse.playlistId;
       creating = false
       editing = false;
       draggable = false;
       viewing = true;
       changeIsNewState();
-
       deleteMovies();
+      routeToPage((`playlist/${slugArr[0]}/${playlistId}`), true);
         
     }
   
@@ -293,11 +294,7 @@
             >
 
             <div class="w-full p-1">
-              <img src="{n.img}" 
-                alt="thumb" 
-                draggable={false}
-                class="block h-full w-full rounded-lg object-cover object-center"
-                >
+              <Image src={n.img} imgclass="block h-full w-full rounded-lg object-cover object-center" draggable={false}/>
             </div>
 
             {#if editing || creating}
