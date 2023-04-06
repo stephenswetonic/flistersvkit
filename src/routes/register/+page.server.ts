@@ -25,6 +25,6 @@ export const actions = {
                 error: err.response.data
             }
         }
-        throw redirect(303, '/login')
+        throw redirect(303, '/verifylanding')
     }
 }
