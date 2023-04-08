@@ -6,6 +6,8 @@
     import {fly} from 'svelte/transition';
     import AutoComplete from "simple-svelte-autocomplete"
     import Image from '$lib/components/Image.svelte';
+    import { Email, Reddit, Telegram, Tumblr, Facebook, Twitter } from 'svelte-share-buttons-component';
+    import { fade } from 'svelte/transition';
 
     let playlistName : string;
     let hovering : any = false;
@@ -21,8 +23,10 @@
     export let data: PageData;
     const slugArr = $page.params.slug.split('/');
     let playlistId = slugArr[1];
-
     let posterWidth = 25;
+
+    const url = $page.url;
+    let linkCopiedAlert = false;
 
     async function addPlaylist() {
         const response = await fetch('/playlist/add', {
@@ -190,6 +194,20 @@
         posterWidth = 10;
       }
     }
+
+    function copyProfileLink() {
+        navigator.clipboard.writeText($page.url.toString());
+        showLinkCopiedAlert();
+    }
+
+    function showLinkCopiedAlert() {
+        linkCopiedAlert = true;
+        setTimeout(hideLinkCopiedAlert, 3000);
+    }
+
+    function hideLinkCopiedAlert() {
+        linkCopiedAlert = false;
+    }
   
     // If loading a playlist that already exists, 
     // fill the ui with that data. Otherwise start in 
@@ -197,6 +215,7 @@
     if (data.movies.length > 0) {
         addMoviesToList();
         playlistName = data.playlist.name;
+        console.log(playlistName);
         viewing = true;
     } else {
         creating = true;
@@ -254,19 +273,20 @@
   <div class="flex flex-wrap -m-4">
     <div class="flex flex-col">
       {#if editing}
-        <button class="bg-gray-800 border-0 py-1 px-3 my-5 mx-5 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0" on:click={addPlaylist}>Save</button>
-        <button class="bg-gray-800 border-0 py-1 px-3 my-5 mx-5 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0" on:click={cancelEdit}>Cancel</button>
+        <button class="btn btn-primary my-2" on:click={addPlaylist}>Save</button>
+        <button class="btn btn-primary my-2" on:click={cancelEdit}>Cancel</button>
       {/if}
 
       {#if creating}
-        <button class="bg-gray-800 border-0 py-1 px-3 my-5 mx-5 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0" on:click={addPlaylist}>Create</button>
+        <button class="btn btn-primary my-2" on:click={addPlaylist}>Create</button>
 
       {/if}
 
       {#if viewing && data.user}
-        <button class="bg-gray-800 border-0 py-1 px-3 my-5 mx-5 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0" on:click={startEditing}>Edit</button>
+        <button class="btn btn-primary my-2" on:click={startEditing}>Edit</button>
       {/if}
-        <button class="bg-gray-800 border-0 py-1 px-3 my-5 mx-5 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0" on:click={goBack}>Back</button>
+        <label for="my-modal-3" class="btn btn-primary my-2">Share</label>
+        <button class="btn btn-primary my-2" on:click={goBack}>Back</button>
     </div>
   </div>
 </div>
@@ -309,10 +329,31 @@
       </div>
     </div>
 
+<input type="checkbox" id="my-modal-3" class="modal-toggle" />
+<div class="modal">
+  <div class="modal-box relative">
+    <label for="my-modal-3" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
+    <Email subject="{playlistName}" body="{url} {url}" />
+    <Reddit class="share-button" title={playlistName} {url} />
+    <Tumblr class="share-button" title={playlistName} {url} caption="{playlistName}" />
+    <Telegram class="share-button" text={playlistName} {url} />
+    <Facebook class="share-button" quote="{playlistName}" {url} />
+    <Twitter class="share-button" text="{playlistName}" {url} hashtags="flister" via="username" related="other,users" />
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <label for="" class="btn" on:click={copyProfileLink}>Copy link</label>
 
-
+    {#if linkCopiedAlert}
+    <div in:fade="{{ duration: 1000 }}" out:fade class="alert alert-success shadow-lg">
+        <div>
+          <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current flex-shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+          <span>Link copied to clipboard!</span>
+        </div>
+      </div>
+    {/if}
+  </div>
+</div>
   
-  <style>
+<style>
 
 
     #list-item.is-active {

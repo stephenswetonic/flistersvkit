@@ -2,7 +2,7 @@
     import { goto } from '$app/navigation';
     import { page } from '$app/stores';
 
-    import type { PageData } from './$types';
+    //import type { PageData } from './$types';
     import { fade } from 'svelte/transition';
     import { Email, Reddit, Telegram, Tumblr, Facebook, Twitter } from 'svelte-share-buttons-component';
 
@@ -37,10 +37,14 @@
     //     location.reload();
     // }
 
+    function copyProfileLink() {
+        navigator.clipboard.writeText($page.url.toString());
+        showLinkCopiedAlert();
+    }
+
     function showLinkCopiedAlert() {
         linkCopiedAlert = true;
         setTimeout(hideLinkCopiedAlert, 3000);
-        
     }
 
     function hideLinkCopiedAlert() {
@@ -53,10 +57,10 @@
     <h1 class="text-center text-4xl tracking-wide mb-10">My Playlists</h1>
 
     {#if data.user}
-    <button on:click={newPlaylist} class="float-left bg-gray-800 border-0 py-1 px-3 focus:outline-none hover:bg-gray-700 rounded text-base mt-4 md:mt-0">New Playlist</button>
+    <button on:click={newPlaylist} class="float-left btn btn-primary m-2">New Playlist</button>
     {/if}
 
-    <label for="my-modal-3" class="btn">Share</label>
+    <label for="my-modal-3" class="btn btn-primary m-2">Share</label>
 
     <div class="flex flex-wrap -m-4">
         
@@ -93,7 +97,7 @@
     <Facebook class="share-button" quote="{title}" {url} />
     <Twitter class="share-button" text="{title}" {url} hashtags="flister" via="username" related="other,users" />
     <!-- svelte-ignore a11y-click-events-have-key-events -->
-    <label for="" class="btn" on:click={showLinkCopiedAlert}>Copy link</label>
+    <label for="" class="btn" on:click={copyProfileLink}>Copy link</label>
 
     {#if linkCopiedAlert}
     <div in:fade="{{ duration: 1000 }}" out:fade class="alert alert-success shadow-lg">
