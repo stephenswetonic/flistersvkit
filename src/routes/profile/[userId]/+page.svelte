@@ -13,7 +13,7 @@
     let playlists = data.playlists;
     let linkCopiedAlert = false;
     const url = $page.url;
-	const title = data.user.name + '\'s Flister Profile';
+	const title = data.name + '\'s Flister Profile';
 
     function newPlaylist() {
         routeToPage((`playlist/${userId}/new`), false);
@@ -51,6 +51,7 @@
         linkCopiedAlert = false;
     }
 
+    console.log(data.user);
 </script>
 
 <div class="container px-2 py-10 mx-auto">

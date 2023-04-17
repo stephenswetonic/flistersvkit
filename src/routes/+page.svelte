@@ -1,20 +1,25 @@
 <script lang="ts">
-    import { goto } from '$app/navigation';
-    import { redirect } from "@sveltejs/kit";
+
 
     export let data;
 
-    function routeToPage(route: string, replaceState: boolean) {
-      goto(`/${route}`, { replaceState }) 
-    }
 
-    if(data.user) {
-      console.log(data.user.id);
-      let url = '/profile/' + data.user.id;
-      //routeToPage(url, false);
-    }
+
+
 
 </script>
+
+<h1 class="text-center text-7xl font-bold tracking-wide text-base-content mt-10">Flister</h1>
+<h3 class="text-center text-4xl tracking-light text-base-content mt-2"> The Film Lister</h3>
+
+<div class="my-12 mx-12">
+  <ul class="list-disc">
+    <li class="text-base-content text-3xl">Create lists of your favorite films, genres, series, etc.</li>
+    <li class="text-base-content text-3xl">Rank lists in any order</li>
+    <li class="text-base-content text-3xl">Share your lists or profile</li>
+    <!-- ... -->
+  </ul>
+</div>
 
  
 

@@ -62,7 +62,7 @@
     }
 
     function goBack() {
-        routeToPage(`profile/${data.user.id}`, false)
+        //routeToPage(`profile/${data.user.id}`, false)
     }
   
     // Drag and drop
@@ -215,7 +215,6 @@
     if (data.movies.length > 0) {
         addMoviesToList();
         playlistName = data.playlist.name;
-        console.log(playlistName);
         viewing = true;
     } else {
         creating = true;
@@ -286,7 +285,7 @@
         <button class="btn btn-primary my-2" on:click={startEditing}>Edit</button>
       {/if}
         <label for="my-modal-3" class="btn btn-primary my-2">Share</label>
-        <button class="btn btn-primary my-2" on:click={goBack}>Back</button>
+        <button class="btn btn-primary my-2" >Back</button>
     </div>
   </div>
 </div>
@@ -295,7 +294,7 @@
     <div class="container mx-auto px-5 py-2 lg:px-32 lg:pt-12">
   
       
-
+      <!-- ignore error for ondragover="return false"-->
       <div class="-m-1 flex flex-wrap md:-m-2">
         {#each movieList as n, index  (n.id)}
           <div
