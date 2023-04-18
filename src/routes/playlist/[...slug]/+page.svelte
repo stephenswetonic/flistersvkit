@@ -24,6 +24,7 @@
     const slugArr = $page.params.slug.split('/');
     let playlistId = slugArr[1];
     let posterWidth = 25;
+    let closeButtonOpacity = 0;
 
     const url = $page.url;
     let linkCopiedAlert = false;
@@ -208,6 +209,14 @@
     function hideLinkCopiedAlert() {
         linkCopiedAlert = false;
     }
+
+    function handleCloseMouseOut() {
+        closeButtonOpacity = 0;
+    }
+
+    function handleCloseMouseOver() {
+        closeButtonOpacity = 100;
+    }
   
     // If loading a playlist that already exists, 
     // fill the ui with that data. Otherwise start in 
@@ -312,16 +321,16 @@
             in:fly={{x : 500, duration : 500}}
             >
 
-            <div class="w-full p-1">
+            <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+            <div class="w-full p-1 relative inline" on:mouseover={handleCloseMouseOver} on:mouseout={handleCloseMouseOut}>
               <Image src={n.img} imgclass="block h-full w-full rounded-lg object-cover object-center" draggable={false}/>
+              <p class="font-bold text-3xl absolute top-2 left-2"> {index+1}</p>
+              {#if editing || creating}
+                <a href="#" on:click={() => removeMovieFromList(index)} class="absolute top-2 right-2" style="opacity : {closeButtonOpacity}">
+                    <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.207 6.207a1 1 0 0 0-1.414-1.414L12 10.586 6.207 4.793a1 1 0 0 0-1.414 1.414L10.586 12l-5.793 5.793a1 1 0 1 0 1.414 1.414L12 13.414l5.793 5.793a1 1 0 0 0 1.414-1.414L13.414 12l5.793-5.793z" fill="#ff0000"/></svg>
+                </a>
+              {/if}
             </div>
-
-            {#if editing || creating}
-              <a href="#" on:click={() => removeMovieFromList(index)}>
-                  <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.207 6.207a1 1 0 0 0-1.414-1.414L12 10.586 6.207 4.793a1 1 0 0 0-1.414 1.414L10.586 12l-5.793 5.793a1 1 0 1 0 1.414 1.414L12 13.414l5.793 5.793a1 1 0 0 0 1.414-1.414L13.414 12l5.793-5.793z" fill="#ff0000"/></svg>
-              </a>
-            {/if}
-              <p class="font-bold text-sm"> {index+1}</p>
             
           </div>
         {/each}
@@ -353,8 +362,6 @@
 </div>
   
 <style>
-
-
     #list-item.is-active {
       background-color: #3273dc;
       color: #fff;
