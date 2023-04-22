@@ -11,7 +11,6 @@
     shuffleArray(movieIds);
     loadMore();
 
-
 	// Add 20 items.
 	async function loadMore() {
         let stop = movieIndex + 10;
@@ -21,22 +20,18 @@
             const posterResponse = await fetch(response.url);
             if (posterResponse.status != 404) {
                 items.push(response.url);
-            items = items; //must be done for svelte reactivity
+                items = items; //must be done for svelte reactivity
             
             }
-
-            
-            
 		}
 	}
 
 	onMount(() => {
 		if (divElement) {
-			console.log("listElm is defined");
 			divElement.addEventListener("scroll", function () {
 				if (
 					divElement.scrollTop + divElement.clientHeight >=
-					divElement.scrollHeight &&
+					(divElement.scrollHeight) &&
                     movieIndex < 250
 
 				) {
@@ -73,15 +68,11 @@
     //https://github.com/skayo/svelte-infinite-loading
 </script>
 
-<button on:click={printItems}>print items</button>
-
-
-
 <div bind:this={divElement} class="container mx-auto px-5 py-2 lg:px-32 lg:pt-12" id="collage">
     <div class="-m-1 flex flex-wrap md:-m-2 justify-center">
         {#each items as item}
 
-            <Lazy fadeOption={{delay: 0, duration: 500}} class="p-1 shrink" >
+            <Lazy height={400} class="p-1 shrink">
                 <img alt="" src={item} class="my-auto h-auto w-full rounded-lg" in:fade="{{ duration: 500 }}"/>
             </Lazy>
 
