@@ -1,12 +1,5 @@
 <script lang="ts">
-
-
-    export let data;
-
-
-
-
-
+    import InfiniteCollage from '$lib/components/InfiniteCollage.svelte';
 </script>
 
 <h1 class="text-center text-7xl font-bold tracking-wide text-base-content mt-10">Flister</h1>
@@ -20,6 +13,8 @@
     <!-- ... -->
   </ul>
 </div>
+
+<InfiniteCollage/>
 
  
 

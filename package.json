@@ -31,6 +31,7 @@
   },
   "type": "module",
   "dependencies": {
-    "pocketbase": "^0.12.1"
+    "pocketbase": "^0.12.1",
+    "svelte-lazy": "^1.2.1"
   }
 }
