@@ -60,19 +60,13 @@
 
     //Imdb top 250
     //https://raw.githubusercontent.com/theapache64/top250/master/top250.json
-
-    //get all imdb ids from list (tt....)
-    //write to json file
-
-    //infinite loading component
-    //https://github.com/skayo/svelte-infinite-loading
 </script>
 
 <div bind:this={divElement} class="container mx-auto px-5 py-2 lg:px-32 lg:pt-12" id="collage">
     <div class="-m-1 flex flex-wrap md:-m-2 justify-center">
         {#each items as item}
 
-            <Lazy height={400} class="p-1 shrink">
+            <Lazy height={800} class="p-1 shrink">
                 <img alt="" src={item} class="my-auto h-auto w-full rounded-lg" in:fade="{{ duration: 500 }}"/>
             </Lazy>
 
@@ -89,10 +83,7 @@
             -ms-overflow-style: none;  /* IE and Edge */
             scrollbar-width: none;  /* Firefox */
 
-            /* Optional, only to check that it works with margin/padding */
-            margin: 30px;
-            padding: 20px;
-            border: 10px solid black;
+
 	    }
 
         #collage::-webkit-scrollbar {
