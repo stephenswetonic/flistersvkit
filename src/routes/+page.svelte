@@ -14,14 +14,13 @@
 
     // Add 20 items.
     async function loadMore() {
+        movieIndex++;
         let stop = movieIndex + 10;
         for (let i = 0; movieIndex < stop; movieIndex++) {
             const url = "http://img.omdbapi.com/?i=" + movieIds[movieIndex].id + '&h=400' + '&apikey=5db6accd';
             const response = await fetch(url);
             items.push(response.url);
             items = items; //must be done for svelte reactivity
-            
-
         }
     }
 
@@ -30,7 +29,7 @@
         divElement.addEventListener("scroll", function () {
           if (
             divElement.scrollTop + divElement.clientHeight >=
-            (divElement.scrollHeight) &&
+            (divElement.scrollHeight - 50) &&
                       movieIndex < 560
 
           ) {
