@@ -67,7 +67,7 @@
         {#each items as item}
 
             <Lazy height={400} class="p-1 shrink">
-                <img alt="" src={item} class="my-auto h-auto w-full rounded-lg" in:fade="{{ duration: 500 }}"/>
+                <img alt="" src={item} class="my-auto h-auto w-full rounded-lg" in:fade={{ duration: 500 }}/>
             </Lazy>
 
         {/each}
