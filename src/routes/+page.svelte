@@ -1,5 +1,5 @@
 <script lang="ts">
-    import movieIds from "$lib/top250ids.json";
+    import movieIds from "$lib/5000movieids.json";
     import Lazy from "svelte-lazy"
     import { onMount } from "svelte";
     import { fade } from 'svelte/transition';
@@ -8,6 +8,7 @@
     let movieIndex = 0;
     let items = [];
 
+    console.log(movieIds.length);
     shuffleArray(movieIds);
     loadMore();
 
@@ -17,12 +18,10 @@
         for (let i = 0; movieIndex < stop; movieIndex++) {
             const url = "http://img.omdbapi.com/?i=" + movieIds[movieIndex].id + '&h=400' + '&apikey=5db6accd';
             const response = await fetch(url);
-            const posterResponse = await fetch(response.url);
-            if (posterResponse.status != 404) {
-                items.push(response.url);
-                items = items; //must be done for svelte reactivity
+            items.push(response.url);
+            items = items; //must be done for svelte reactivity
             
-            }
+
         }
     }
 
@@ -32,7 +31,7 @@
           if (
             divElement.scrollTop + divElement.clientHeight >=
             (divElement.scrollHeight) &&
-                      movieIndex < 250
+                      movieIndex < 560
 
           ) {
             loadMore();
@@ -68,7 +67,7 @@
     <div class="-m-1 flex flex-wrap md:-m-2 justify-center">
         {#each items as item}
 
-            <Lazy height={800} class="p-1 shrink">
+            <Lazy height={400} class="p-1 shrink">
                 <img alt="" src={item} class="my-auto h-auto w-full rounded-lg" in:fade="{{ duration: 500 }}"/>
             </Lazy>
 

@@ -1,15 +1,12 @@
 <script lang="ts">
-
+    import movieUrls from "$lib/csvjson.json";
 
     async function getTop250() {
-        const url = "https://raw.githubusercontent.com/theapache64/top250/master/top250.json";
-        const response = await fetch(url);
-        const json = await response.json();
-
         let data = []
         
-        for(let i = 0; i < json.length; i++) {
-            const urlId = {id : json[i].url.split('/')[2]};
+        for(let i = 0; i < movieUrls.length; i++) {
+
+            const urlId = {id : movieUrls[i].url.split('/')[4]};
             data.push(urlId);
         }
         const urlJson = JSON.stringify(data);
@@ -17,7 +14,7 @@
         var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(data));
         var dlAnchorElem = document.getElementById('downloadAnchorElem');
         dlAnchorElem.setAttribute("href",     dataStr     );
-        dlAnchorElem.setAttribute("download", "top250ids.json");
+        dlAnchorElem.setAttribute("download", "5000movieids.json");
         dlAnchorElem.click();
     }
 
