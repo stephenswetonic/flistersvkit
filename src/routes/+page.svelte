@@ -8,7 +8,6 @@
     let movieIndex = 0;
     let items = [];
 
-    console.log(movieIds.length);
     shuffleArray(movieIds);
     loadMore();
 

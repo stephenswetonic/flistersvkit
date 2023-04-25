@@ -18,12 +18,13 @@ async function createMovies(playlistId : string, movieList, pb) {
       const createdMovie = await pb.collection('movies').update(movieList[i].recordid, record);
     }
   }
+  console.log(playlistId);
   return playlistId;
 };
  
 export const POST = (async ({ request, locals }) => {
   const { movieList, playlistName, creating, playlistId } = await request.json();
-  let newPlaylistId : string;
+  let newPlaylistId = playlistId;
   try {
     const record = {
         "name": playlistName,

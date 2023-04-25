@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { goto } from '$app/navigation';
+    import { goto, afterNavigate } from '$app/navigation';
     import { page } from '$app/stores';
     import type { PageData } from './$types';
     import {flip} from 'svelte/animate';
@@ -8,6 +8,7 @@
     import Image from '$lib/components/Image.svelte';
     import { Email, Reddit, Telegram, Tumblr, Facebook, Twitter } from 'svelte-share-buttons-component';
     import { fade } from 'svelte/transition';
+    import { PUBLIC_TMDB_KEY} from '$env/static/public';
 
     let playlistName : string;
     let hovering : any = false;
@@ -21,8 +22,9 @@
     let viewing = false;
 
     export let data: PageData;
-    const slugArr = $page.params.slug.split('/');
+    let slugArr = $page.params.slug.split('/');
     let playlistId = slugArr[1];
+    
     let posterWidth = 25;
     let closeButtonOpacity = 0;
 
@@ -46,8 +48,8 @@
       viewing = true;
       changeIsNewState();
       deleteMovies();
+
       routeToPage((`playlist/${slugArr[0]}/${playlistId}`), true);
-        
     }
   
     // Sets ui movielist to reflect db state
@@ -59,11 +61,7 @@
 
     // Routing
     function routeToPage(route: string, replaceState: boolean) {
-      goto(`/${route}`, { replaceState }) 
-    }
-
-    function goBack() {
-        //routeToPage(`profile/${data.user.id}`, false)
+      goto(`/${route}`, {replaceState, invalidateAll : true}) 
     }
   
     // Drag and drop
@@ -94,12 +92,11 @@
     // Adds movie from search box to ui
     async function addMovieToList() {
       // Getting high res poster
-      const url = "http://img.omdbapi.com/?i=" + selectedMovie.imdbID + '&h=2000' + '&apikey=5db6accd';
-      const response = await fetch(url);
+      const posterUrl = "https://image.tmdb.org/t/p/original/" + selectedMovie.poster_path + "?api_key=f0ed4d39fd60f596944755f0ace11282"
   
       // Adding to playlist ui. In creating or editing mode,
       // isNew is true so the record is created.
-      movieList.push({"recordid" : "","title" : selectedMovie.Title, "id" : movieList.length, "img": response.url, "imdbid" : selectedMovie.imdbID, "isNew" : true});
+      movieList.push({"recordid" : "","title" : selectedMovie.original_title, "id" : movieList.length, "img": posterUrl, "imdbid" : selectedMovie.id, "isNew" : true});
       hovering = movieList.length;
       updatePosterWidth();
     }
@@ -110,6 +107,8 @@
       draggable = true;
       viewing = false;
       creating = false;
+
+      playlistId = slugArr[1];
       playlistName = data.playlist.name;
     }
   
@@ -159,13 +158,13 @@
 
     }
   
-    // Gets search suggestions from OMDB
+    // Gets search suggestions from TMDB
     async function getSearchItems(keyword) {
-        const url = "http://www.omdbapi.com/?s=" + encodeURI(keyword) + '&apikey=5db6accd';
-        const response = await fetch(url)
-        const json = await response.json()
+        const url = "https://api.themoviedb.org/3/search/movie?api_key=" + PUBLIC_TMDB_KEY + "&query=" + encodeURI(keyword);
+        const response = await fetch(url);
+        const json = await response.json();
+        return json.results;
 
-        return json.Search
 
     }
   
@@ -257,15 +256,15 @@
       localFiltering={false}
       showLoadingIndicator={true}
       matchAllKeywords={false}
-      labelFieldName="Title"
-      valueFieldName="imdbID"
+      labelFieldName="original_title"
+      valueFieldName="id"
       bind:selectedItem="{selectedMovie}"
       placeholder="Search Movies..."
       class="w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring-blue-500 focus:border-blue-500 hover:ring-blue-500 hover:border-blue-500 "
       >
   
     <div slot="item" let:item={item} let:label={label} class="flex flex-row">
-        <img src="{item.Poster}" alt="thumbnail" style="max-width: 100px; height: auto;">
+        <img src="{"https://image.tmdb.org/t/p/original/" + item.poster_path + "?api_key=f0ed4d39fd60f596944755f0ace11282"}" alt="thumbnail" style="max-width: 100px; height: auto;">
         <div class="text-white pl-6 text-lg font-medium">{@html label}</div>
     </div>
   
@@ -294,7 +293,6 @@
         <button class="btn btn-primary my-2" on:click={startEditing}>Edit</button>
       {/if}
         <label for="my-modal-3" class="btn btn-primary my-2">Share</label>
-        <button class="btn btn-primary my-2" >Back</button>
     </div>
   </div>
 </div>
