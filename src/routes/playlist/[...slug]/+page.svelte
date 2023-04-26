@@ -112,7 +112,7 @@
       viewing = false;
       creating = false;
 
-      //playlistId = slugArr[1];
+      playlistId = slugArr[1];
       playlistName = data.playlist.name;
     }
   
@@ -298,7 +298,6 @@
         <button class="btn btn-primary my-2" on:click={startEditing}>Edit</button>
       {/if}
         <label for="my-modal-3" class="btn btn-primary my-2">Share</label>
-        <button class="btn btn-primary" on:click={printPlaylistId}>print</button>
     </div>
   </div>
 </div>

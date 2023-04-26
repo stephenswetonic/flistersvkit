@@ -37,6 +37,20 @@
     //     location.reload();
     // }
 
+    async function removePlaylist(playlistId) {
+        console.log(playlistId)
+        const response = await fetch('/profile/removePlaylist', {
+        method: 'DELETE',
+        body: JSON.stringify({ playlistId }),
+        headers: {
+          'content-type': 'application/json'
+        }
+        });
+
+      await response.json();
+      location.reload();
+    }
+
     function copyProfileLink() {
         navigator.clipboard.writeText($page.url.toString());
         showLinkCopiedAlert();
@@ -51,7 +65,6 @@
         linkCopiedAlert = false;
     }
 
-    console.log(data.user);
 </script>
 
 <div class="container px-2 py-10 mx-auto">
@@ -67,22 +80,18 @@
         
         {#each playlists as playlist}
         
-            <div class="xl:w-1/4 md:w-1/2 p-4">
+            <div class="xl:w-1/4 md:w-1/2 p-4 relative">
                 <div on:click={() => selectPlaylist(playlist)} on:keypress={() => selectPlaylist(playlist)} class="bg-gray-800 bg-opacity-40 p-6 rounded-lg cursor-pointer">
+                    {#if data.user}
+                    <button class="btn btn-sm absolute top-5 right-5" on:click|stopPropagation={() => removePlaylist(playlist.id)}>
+                        <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.207 6.207a1 1 0 0 0-1.414-1.414L12 10.586 6.207 4.793a1 1 0 0 0-1.414 1.414L10.586 12l-5.793 5.793a1 1 0 1 0 1.414 1.414L12 13.414l5.793 5.793a1 1 0 0 0 1.414-1.414L13.414 12l5.793-5.793z" fill="#ff0000"/></svg>
+                    </button>
+                    {/if}
                     <img class="h-full rounded w-full object-cover object-center mb-6" src="https://dummyimage.com/300x400" alt="content">
                     <h2 class="text-lg text-white font-medium title-font mb-4">{playlist.name}</h2>
                     <p class="leading-relaxed text-base">Description</p>
                 </div>
             </div>
-    
-
-            <!-- <a href="#" on:click={() => selectPlaylist(playlist)}>
-                <div class="playlist-item">{playlist.name}</div>
-            </a>
-            <a href="#" on:click={() => deletePlaylist(playlist)}>
-                <img src="src/assets/closebutton.svg" alt="close">
-            </a> -->
-
         {/each}
     </div> 
 </div>
