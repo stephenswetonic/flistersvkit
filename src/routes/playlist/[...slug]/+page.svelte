@@ -61,7 +61,11 @@
 
     // Routing
     function routeToPage(route: string, replaceState: boolean) {
-      goto(`/${route}`, {replaceState}) 
+      goto(`/${route}`, {replaceState, invalidateAll : true}); 
+    }
+
+    function printPlaylistId() {
+      console.log(playlistId);
     }
   
     // Drag and drop
@@ -108,7 +112,7 @@
       viewing = false;
       creating = false;
 
-      playlistId = slugArr[1];
+      //playlistId = slugArr[1];
       playlistName = data.playlist.name;
     }
   
@@ -225,6 +229,7 @@
         playlistName = data.playlist.name;
         viewing = true;
     } else {
+        console.log("default creating mode");
         creating = true;
         draggable = true;
     }
@@ -293,6 +298,7 @@
         <button class="btn btn-primary my-2" on:click={startEditing}>Edit</button>
       {/if}
         <label for="my-modal-3" class="btn btn-primary my-2">Share</label>
+        <button class="btn btn-primary" on:click={printPlaylistId}>print</button>
     </div>
   </div>
 </div>

@@ -1,7 +1,12 @@
 <script>
   import "../app.postcss";
   export let data;
-  let profileLink = "/profile/" + data.user.id;
+  let profileLink;
+
+  if (data.user) {
+    profileLink = "/profile/" + data.user.id;
+  }
+  
 </script>
 
 <div class="min-h-full">

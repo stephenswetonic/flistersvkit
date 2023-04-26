@@ -20,7 +20,7 @@
     };
 
     function selectPlaylist(playlist) {
-        routeToPage((`playlist/${userId}/${playlist.id}`), false);
+        routeToPage((`playlist/${userId}/${playlist.id}`), true);
     }
 
     function routeToPage(route: string, replaceState: boolean) {

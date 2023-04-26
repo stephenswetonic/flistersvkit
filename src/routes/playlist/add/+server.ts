@@ -18,7 +18,6 @@ async function createMovies(playlistId : string, movieList, pb) {
       const createdMovie = await pb.collection('movies').update(movieList[i].recordid, record);
     }
   }
-  console.log(playlistId);
   return playlistId;
 };
  
