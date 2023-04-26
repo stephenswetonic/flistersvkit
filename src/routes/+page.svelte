@@ -29,7 +29,7 @@
           if (
             divElement.scrollTop + divElement.clientHeight >=
             (divElement.scrollHeight - 50) &&
-                      movieIndex < 560
+                      movieIndex < 559
 
           ) {
             loadMore();

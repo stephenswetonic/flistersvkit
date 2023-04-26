@@ -1,6 +1,7 @@
 <script>
   import "../app.postcss";
   export let data;
+  let profileLink = "/profile/" + data.user.id;
 </script>
 
 <div class="min-h-full">
@@ -24,12 +25,11 @@
         <!-- svelte-ignore a11y-no-noninteractive-tabindex -->
         <ul
           tabindex="0"
-          class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52"
+          class="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-300 rounded-box w-52"
         >
           <li>
-            <a href="/my/projects" class="justify-between">My Projects</a>
+            <a href={profileLink} class="justify-between">My Lists</a>
           </li>
-          <li><a href="/my/settings">Settings</a></li>
           <li>
             <form action="/logout" method="POST">
               <button type="submit" class="w-full text-start">Logout</button>

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import { goto, afterNavigate } from '$app/navigation';
+    import { goto } from '$app/navigation';
     import { page } from '$app/stores';
     import type { PageData } from './$types';
     import {flip} from 'svelte/animate';
@@ -61,7 +61,7 @@
 
     // Routing
     function routeToPage(route: string, replaceState: boolean) {
-      goto(`/${route}`, {replaceState, invalidateAll : true}) 
+      goto(`/${route}`, {replaceState}) 
     }
   
     // Drag and drop
@@ -92,7 +92,7 @@
     // Adds movie from search box to ui
     async function addMovieToList() {
       // Getting high res poster
-      const posterUrl = "https://image.tmdb.org/t/p/original/" + selectedMovie.poster_path + "?api_key=f0ed4d39fd60f596944755f0ace11282"
+      const posterUrl = "https://image.tmdb.org/t/p/original/" + selectedMovie.poster_path + "?api_key=" + PUBLIC_TMDB_KEY;
   
       // Adding to playlist ui. In creating or editing mode,
       // isNew is true so the record is created.
@@ -264,7 +264,7 @@
       >
   
     <div slot="item" let:item={item} let:label={label} class="flex flex-row">
-        <img src="{"https://image.tmdb.org/t/p/original/" + item.poster_path + "?api_key=f0ed4d39fd60f596944755f0ace11282"}" alt="thumbnail" style="max-width: 100px; height: auto;">
+        <img src={`https://image.tmdb.org/t/p/original${item.poster_path}?api_key=${PUBLIC_TMDB_KEY}`} alt="thumbnail" style="max-width: 100px; height: auto;">
         <div class="text-white pl-6 text-lg font-medium">{@html label}</div>
     </div>
   
