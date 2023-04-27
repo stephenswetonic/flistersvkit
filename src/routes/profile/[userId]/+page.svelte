@@ -64,23 +64,26 @@
 
 </script>
 
-<div class="container px-2 py-10 mx-auto">
-    <h1 class="text-center text-4xl tracking-wide mb-10">My Playlists</h1>
 
+<div class="container px-2 mx-auto">
+
+  <div class="relative pb-20 pt-5">
+    <h1 class="float-left text-center text-5xl tracking-wide m-2">My Lists</h1>
+    <label for="my-modal-3" class="btn btn-primary m-2 float-right">Share</label>
     {#if data.user}
-    <button on:click={newPlaylist} class="float-left btn btn-primary m-2">New Playlist</button>
+      <button on:click={newPlaylist} class="btn btn-primary m-2 float-right">New List</button>
     {/if}
+  </div>
 
-    <label for="my-modal-3" class="btn btn-primary m-2">Share</label>
 
     <div class="flex flex-wrap -m-4">
         
         {#each playlists as playlist}
         
-            <div class="xl:w-1/4 md:w-1/2 p-4 relative">
-                <div on:click={() => selectPlaylist(playlist)} on:keypress={() => selectPlaylist(playlist)} class="bg-gray-800 bg-opacity-40 p-6 rounded-lg cursor-pointer">
+            <div class="xl:w-1/4 md:w-1/2 p-2 relative">
+                <div on:click={() => selectPlaylist(playlist)} on:keypress={() => selectPlaylist(playlist)} class="bg-gray-800 bg-opacity-40 p-10 rounded-lg cursor-pointer">
                     {#if data.user}
-                    <button class="btn modal-button" on:click|stopPropagation={()=> setPlaylistToDelete(playlist.id)}>
+                    <button class="btn btn-sm btn-ghost absolute top-4 right-4" on:click|stopPropagation={()=> setPlaylistToDelete(playlist.id)}>
                       <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.207 6.207a1 1 0 0 0-1.414-1.414L12 10.586 6.207 4.793a1 1 0 0 0-1.414 1.414L10.586 12l-5.793 5.793a1 1 0 1 0 1.414 1.414L12 13.414l5.793 5.793a1 1 0 0 0 1.414-1.414L13.414 12l5.793-5.793z" fill="#ff0000"/></svg>
                     </button>
                     {/if}

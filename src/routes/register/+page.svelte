@@ -14,8 +14,8 @@
     <form action="?/register" method="POST" class="flex flex-col items-center space-y-2 w-full pt-4">
         <Input type="text" id="name" label="Name" value={form?.data?.name} errors={form?.errors?.name} />
 		<Input type="email" id="email" label="Email" value={form?.data?.email} errors={form?.errors?.email} />
-		<Input type="password" id="password" label="Password" errors={form?.errors?.password} />
-		<Input type="password" id="passwordConfirm" label="Confirm Password" errors={form?.errors?.passwordConfirm} />
+		<Input type="password" id="password" label="Password" errors={form?.errors?.password} optionalMessage="Password must be a minimum of 8 characters and contain at least one letter, one number, and one special character (@$!%*#?&)."/>
+		<Input type="password" id="passwordConfirm" label="Confirm Password" errors={form?.errors?.passwordConfirm} optionalMessage="Password must be a minimum of 8 characters and contain at least one letter, one number, and one special character (@$!%*#?&)." />
 
 		<div class="w-full max-w-lg pt-2">
 			<button type="submit" class="btn btn-primary w-full">Register</button>
