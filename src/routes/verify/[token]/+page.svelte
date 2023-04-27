@@ -3,7 +3,6 @@
     export let data;
     export let form;
     let emailField;
-    console.log(data.success);
 </script>
 
 

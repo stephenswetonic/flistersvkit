@@ -1,6 +1,6 @@
 import type { PageServerLoad, Actions } from './$types';
 import { validateData } from "$lib/utils";
-import { error, fail, redirect } from "@sveltejs/kit";
+import { fail, redirect } from "@sveltejs/kit";
 import { requestNewValidationSchema } from "$lib/schemas";
 
 export const load = (async ({ locals, params }) => {

@@ -12,8 +12,10 @@
     const userId = $page.params.userId;
     let playlists = data.playlists;
     let linkCopiedAlert = false;
+    let playlistIdToDelete;
+    let isModalOpen = false;
     const url = $page.url;
-	const title = data.name + '\'s Flister Profile';
+	  const title = data.name + '\'s Flister Profile';
 
     function newPlaylist() {
         routeToPage((`playlist/${userId}/new`), false);
@@ -27,28 +29,17 @@
       goto(`/${route}`, { replaceState }) 
     }
 
-    // async function deletePlaylist(playlist) {
-    //     console.log(playlist);
-    //     let moviesInPlaylist = await pb.collection('movies').getFullList(50, { filter: `playlist="${playlist.id}"`});
-    //     for (let i = 0; i < moviesInPlaylist.length; i++) {
-    //         await pb.collection('movies').delete(moviesInPlaylist[i].id);
-    //     }
-    //     await pb.collection('playlists').delete(playlist.id);
-    //     location.reload();
-    // }
-
-    async function removePlaylist(playlistId) {
-        console.log(playlistId)
+    async function removePlaylist() {
         const response = await fetch('/profile/removePlaylist', {
         method: 'DELETE',
-        body: JSON.stringify({ playlistId }),
+        body: JSON.stringify({ playlistIdToDelete }),
         headers: {
           'content-type': 'application/json'
         }
         });
 
       await response.json();
-      location.reload();
+      location.reload(); //should remove from ui instead
     }
 
     function copyProfileLink() {
@@ -63,6 +54,12 @@
 
     function hideLinkCopiedAlert() {
         linkCopiedAlert = false;
+    }
+
+    function setPlaylistToDelete(playlistId) {
+      isModalOpen = true;
+      playlistIdToDelete = playlistId;
+      console.log(playlistIdToDelete);
     }
 
 </script>
@@ -83,8 +80,8 @@
             <div class="xl:w-1/4 md:w-1/2 p-4 relative">
                 <div on:click={() => selectPlaylist(playlist)} on:keypress={() => selectPlaylist(playlist)} class="bg-gray-800 bg-opacity-40 p-6 rounded-lg cursor-pointer">
                     {#if data.user}
-                    <button class="btn btn-sm absolute top-5 right-5" on:click|stopPropagation={() => removePlaylist(playlist.id)}>
-                        <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.207 6.207a1 1 0 0 0-1.414-1.414L12 10.586 6.207 4.793a1 1 0 0 0-1.414 1.414L10.586 12l-5.793 5.793a1 1 0 1 0 1.414 1.414L12 13.414l5.793 5.793a1 1 0 0 0 1.414-1.414L13.414 12l5.793-5.793z" fill="#ff0000"/></svg>
+                    <button class="btn modal-button" on:click|stopPropagation={()=> setPlaylistToDelete(playlist.id)}>
+                      <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.207 6.207a1 1 0 0 0-1.414-1.414L12 10.586 6.207 4.793a1 1 0 0 0-1.414 1.414L10.586 12l-5.793 5.793a1 1 0 1 0 1.414 1.414L12 13.414l5.793 5.793a1 1 0 0 0 1.414-1.414L13.414 12l5.793-5.793z" fill="#ff0000"/></svg>
                     </button>
                     {/if}
                     <img class="h-full rounded w-full object-cover object-center mb-6" src="https://dummyimage.com/300x400" alt="content">
@@ -120,3 +117,14 @@
   </div>
 </div>
 
+<!-- Put this part before </body> tag -->
+<div class="modal" class:modal-open={isModalOpen}>
+  <div class="modal-box">
+    <h3 class="font-bold text-lg">Delete list</h3>
+    <p class="py-4">Are you sure you want to delete this list?</p>
+    <div class="modal-action" on:click={removePlaylist} on:keypress={removePlaylist}>
+      <button class="btn btn-outline" on:click|stopPropagation={() => isModalOpen = false}>Cancel</button>
+      <button class="btn btn-error" on:click={()=>isModalOpen = false}>DELETE</button>
+    </div>
+  </div>
+</div>
