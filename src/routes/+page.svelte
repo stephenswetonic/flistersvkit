@@ -4,9 +4,15 @@
     import { onMount } from "svelte";
     import { fade } from 'svelte/transition';
 
+    export let data;
     let divElement;
     let movieIndex = 0;
     let items = [];
+    let newListLink;
+
+    if (data.user) {
+      const newListLink = 'playlist/' + data.user.id + '/new';
+    }
 
     shuffleArray(movieIds);
     loadMore();
@@ -57,7 +63,12 @@
       <li class="text-base-content text-3xl">Create lists of your favorite films, genres, series, etc.</li>
       <li class="text-base-content text-3xl">Rank lists in any order</li>
       <li class="text-base-content text-3xl">Share your lists or profile</li>
-      <!-- ... -->
+
+      {#if data.user}
+        <li class="text-3xl "><a href={newListLink} class="text-3xl text-primary font-medium hover:cursor-pointer hover:underline">Create a list now</a></li>
+      {:else}
+        <li class="text-3xl "><a href="login/" class="text-3xl text-primary font-medium hover:cursor-pointer hover:underline">Create a list now</a></li>
+      {/if}
     </ul>
   </div>
 
