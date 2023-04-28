@@ -62,6 +62,7 @@
       console.log(playlistIdToDelete);
     }
 
+
 </script>
 
 
@@ -80,7 +81,7 @@
         
         {#each playlists as playlist}
         
-            <div class="xl:w-1/4 md:w-1/2 p-2 relative">
+            <div class="xl:w-1/4 md:w-1/2 p-2 relative transition duration-200 hover:scale-105">
                 <div on:click={() => selectPlaylist(playlist)} on:keypress={() => selectPlaylist(playlist)} class="bg-gray-800 bg-opacity-40 p-10 rounded-lg cursor-pointer">
                     {#if data.user}
                     <button class="btn btn-sm btn-ghost absolute top-4 right-4" on:click|stopPropagation={()=> setPlaylistToDelete(playlist.id)}>

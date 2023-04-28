@@ -3,12 +3,14 @@
     import Lazy from "svelte-lazy"
     import { onMount } from "svelte";
     import { fade } from 'svelte/transition';
+    import { browser } from '$app/environment';
 
     export let data;
     let divElement;
     let movieIndex = 0;
     let items = [];
     let newListLink;
+    let footer;
 
     if (data.user) {
       const newListLink = 'playlist/' + data.user.id + '/new';
@@ -20,6 +22,7 @@
     // Add 20 items.
     async function loadMore() {
         movieIndex++;
+        console.log(movieIndex);
         let stop = movieIndex + 10;
         for (let i = 0; movieIndex < stop; movieIndex++) {
             const url = "http://img.omdbapi.com/?i=" + movieIds[movieIndex].id + '&h=400' + '&apikey=5db6accd';
@@ -29,20 +32,36 @@
         }
     }
 
-    onMount(() => {
-      if (divElement) {
-        divElement.addEventListener("scroll", function () {
-          if (
-            divElement.scrollTop + divElement.clientHeight >=
-            (divElement.scrollHeight - 50) &&
-                      movieIndex < 559
+    // onMount(() => {
+    //   if (divElement) {
+    //     divElement.addEventListener("scroll", function () {
+    //       if (
+    //         divElement.scrollTop + divElement.clientHeight >=
+    //         (divElement.scrollHeight - 50) &&
+    //                   movieIndex < 559
 
-          ) {
-            loadMore();
-          }
-        });
-      }
-    });
+    //       ) {
+    //         loadMore();
+    //       }
+    //     });
+    //   }
+    // });
+
+    onMount(() => {
+ 		if (browser) {
+ 			const handleIntersect = (entries, observer) => {
+ 				entries.forEach((entry) => {
+ 					if (movieIndex > 599) {
+ 						observer.unobserve(entry.target);
+ 					}
+ 					loadMore();
+ 				});
+ 			};
+ 			const options = { threshold: 0.5, rootMargin: "10px"};
+ 			const observer = new IntersectionObserver(handleIntersect, options);
+ 			observer.observe(footer);
+ 		}
+ 	});
 
       function shuffleArray(array) {
           for (var i = array.length - 1; i > 0; i--) {
@@ -72,6 +91,18 @@
     </ul>
   </div>
 
+  <!-- <div class="container mx-auto px-5 py-2 lg:px-32 lg:pt-12" id="collage">
+    <div class="-m-1 flex flex-wrap md:-m-2 justify-center">
+        {#each items as item}
+
+            <Lazy height={400} class="p-1 shrink">
+                <img alt="" src={item} class="my-auto h-auto w-full rounded-lg" in:fade={{ duration: 500 }}/>
+            </Lazy>
+
+        {/each}
+    </div>
+  </div> -->
+
   <div class="container mx-auto px-5 py-2 lg:px-32 lg:pt-12" id="collage">
     <div class="-m-1 flex flex-wrap md:-m-2 justify-center">
         {#each items as item}
@@ -83,7 +114,12 @@
         {/each}
     </div>
   </div>
+
+    <footer class="h-[50px]" bind:this={footer}>
+    </footer>
 </div>
+
+
 
 <style>
     .homebody {
