@@ -11,8 +11,9 @@
     let newListLink;
 
     if (data.user) {
-      const newListLink = 'playlist/' + data.user.id + '/new';
+      newListLink = 'playlist/' + data.user.id + '/new';
     }
+
 
     shuffleArray(movieIds);
     loadMore();

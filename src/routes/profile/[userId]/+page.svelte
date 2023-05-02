@@ -62,6 +62,7 @@
       console.log(playlistIdToDelete);
     }
 
+    console.log(data.playlists);
 
 </script>
 
@@ -81,14 +82,19 @@
         
         {#each playlists as playlist}
         
-            <div class="xl:w-1/4 md:w-1/2 p-2 relative transition duration-200 hover:scale-105">
-                <div on:click={() => selectPlaylist(playlist)} on:keypress={() => selectPlaylist(playlist)} class="bg-gray-800 bg-opacity-40 p-10 rounded-lg cursor-pointer">
+          
+            <div class="p-2 relative transition duration-200 hover:scale-105">
+                <div on:click={() => selectPlaylist(playlist)} on:keypress={() => selectPlaylist(playlist)} class="bg-gray-800 p-6 bg-opacity-40 rounded-lg cursor-pointer">
                     {#if data.user}
                     <button class="btn btn-sm btn-ghost absolute top-4 right-4" on:click|stopPropagation={()=> setPlaylistToDelete(playlist.id)}>
                       <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.207 6.207a1 1 0 0 0-1.414-1.414L12 10.586 6.207 4.793a1 1 0 0 0-1.414 1.414L10.586 12l-5.793 5.793a1 1 0 1 0 1.414 1.414L12 13.414l5.793 5.793a1 1 0 0 0 1.414-1.414L13.414 12l5.793-5.793z" fill="#ff0000"/></svg>
                     </button>
                     {/if}
-                    <img class="h-full rounded w-full object-cover object-center mb-6" src="https://dummyimage.com/300x400" alt="content">
+                    <div class="grid grid-cols-1">
+                      {#each playlist.thumbnailImgs as thumbnailImg}
+                        <img src={thumbnailImg.img} class="xl:max-h-[300px] md:max-h-[150px] max-h-[100px] rounded col-start-1 row-start-1" style="margin-left: {thumbnailImg.index*40}px;" alt="thumbnail">
+                      {/each}
+                    </div>
                     <h2 class="text-lg text-white font-medium title-font mb-4">{playlist.name}</h2>
                     <p class="leading-relaxed text-base">Description</p>
                 </div>
