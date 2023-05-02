@@ -3,12 +3,12 @@
     import { page } from '$app/stores';
     import type { PageData } from './$types';
     import {flip} from 'svelte/animate';
-    import {fly} from 'svelte/transition';
+    import {fly, fade} from 'svelte/transition';
     import AutoComplete from "simple-svelte-autocomplete"
     import Image from '$lib/components/Image.svelte';
     import { Email, Reddit, Telegram, Tumblr, Facebook, Twitter } from 'svelte-share-buttons-component';
-    import { fade } from 'svelte/transition';
     import { PUBLIC_TMDB_KEY} from '$env/static/public';
+    import Lazy from "svelte-lazy"
 
     let playlistName : string;
     let hovering : any = false;
@@ -26,7 +26,6 @@
     let playlistId = slugArr[1];
     
     let posterWidth = 25;
-    let closeButtonOpacity = 0;
 
     const url = $page.url;
     let linkCopiedAlert = false;
@@ -212,14 +211,6 @@
     function hideLinkCopiedAlert() {
         linkCopiedAlert = false;
     }
-
-    function handleCloseMouseOut() {
-        closeButtonOpacity = 0;
-    }
-
-    function handleCloseMouseOver() {
-        closeButtonOpacity = 100;
-    }
   
     // If loading a playlist that already exists, 
     // fill the ui with that data. Otherwise start in 
@@ -321,18 +312,18 @@
             ondragover="return false"
             on:dragenter={() => hovering = index}
             class:is-active={hovering === index}
-            out:fly={{x : -500, duration : 500}}
-            in:fly={{x : 500, duration : 500}}
+            out:fade={{duration : 500}}
+            in:fade={{duration : 500}}
             >
 
             <!-- svelte-ignore a11y-mouse-events-have-key-events -->
-            <div class="w-full p-1 relative inline" on:mouseover={handleCloseMouseOver} on:mouseout={handleCloseMouseOut}>
-              <Image src={n.img} imgclass="block h-full w-full rounded-lg object-cover object-center" draggable={false}/>
+            <div class="w-full p-1 relative inline" class:movie-hover={true}>
+              <img src={n.img} alt="poster" class="h-full w-full rounded-lg object-cover object-center" draggable={false}>
               <p class="font-bold text-3xl absolute top-2 left-2"> {index+1}</p>
               {#if editing || creating}
-                <a href="#" on:click={() => removeMovieFromList(index)} class="absolute top-2 right-2" style="opacity : {closeButtonOpacity}">
+                <button on:click={() => removeMovieFromList(index)} class="opacity-0 btn btn-sm btn-ghost absolute top-3 right-3">
                     <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" clip-rule="evenodd" d="M19.207 6.207a1 1 0 0 0-1.414-1.414L12 10.586 6.207 4.793a1 1 0 0 0-1.414 1.414L10.586 12l-5.793 5.793a1 1 0 1 0 1.414 1.414L12 13.414l5.793 5.793a1 1 0 0 0 1.414-1.414L13.414 12l5.793-5.793z" fill="#ff0000"/></svg>
-                </a>
+                </button>
               {/if}
             </div>
             
@@ -399,5 +390,9 @@
     .autocomplete-wrapper :global(.autocomplete-list-item.selected) {
       --tw-bg-opacity: 1 !important;
       background-color: rgb(55 65 81 / var(--tw-bg-opacity)) !important;
+    }
+
+    .movie-hover:hover > button {
+      opacity: 100%
     }
   </style>
