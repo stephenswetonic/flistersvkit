@@ -5,7 +5,7 @@
     import {flip} from 'svelte/animate';
     import {fly, fade} from 'svelte/transition';
     import AutoComplete from "simple-svelte-autocomplete"
-    import Image from '$lib/components/Image.svelte';
+    import Input from '$lib/components/Input.svelte';
     import { Email, Reddit, Telegram, Tumblr, Facebook, Twitter } from 'svelte-share-buttons-component';
     import { PUBLIC_TMDB_KEY} from '$env/static/public';
     import Lazy from "svelte-lazy"
@@ -26,6 +26,7 @@
     let playlistId = slugArr[1];
     
     let posterWidth = 25;
+    let descriptionText : string;
 
     const url = $page.url;
     let linkCopiedAlert = false;
@@ -227,26 +228,27 @@
     }
 </script>
   
-<section class="text-gray-400 body-font bg-gray-900">
+<section class="body-font bg-gray-900 container mx-auto px-5 lg:px-32 lg:pt-6">
   
   {#if viewing}
-    <div class="flex justify-center py-6">
-      <p class="bg-gray-900 text-gray-400 bg-opacity-20 text-5xl text-center outline-none py-5 px-3 leading-8">{playlistName}</p>
+    <div class="flex ">
+      <h1 class="text-5xl tracking-wide">{playlistName}</h1>
     </div>
   {/if}
   
   {#if creating || editing}
-    <form on:submit|preventDefault class="flex justify-center py-1">
-      <input
-        placeholder="Playlist Name"
-        type="text"
-        bind:value={playlistName}
-        class="bg-gray-900 bg-opacity-20 w-full text-5xl text-center focus:ring-2 focus:border-blue-900 hover:border-gray-700 border-transparent border-2 outline-none text-gray-400 py-1 px-3 leading-8"
-      />
-      <!-- Go to playlist builder screen -->
-    </form> 
+    <label for="listTitle" class="label font-medium">
+    <span class="font-medium">List Title</span>
+    </label>
+    <input type="text" id="listTitle" required={true} placeholder="List Name" class="input input-bordered w-full max-w-lg" bind:value={playlistName}>
+
+    <label for="listTitle" class="label font-medium">
+    <span class="font-medium">Description</span>
+    </label>
+    <textarea name="Description" id="" cols="10" rows="5" placeholder="Description" class="input input-bordered w-full max-w-lg" bind:value={descriptionText}></textarea>
+    
   
-  <div class="autocomplete-wrapper flex justify-center">
+  <div class="autocomplete-wrapper flex">
     <AutoComplete
       searchFunction="{getSearchItems}"
       delay="0"
@@ -257,7 +259,7 @@
       valueFieldName="id"
       bind:selectedItem="{selectedMovie}"
       placeholder="Search Movies..."
-      class="w-full p-4 pl-10 text-sm text-gray-900 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring-blue-500 focus:border-blue-500 hover:ring-blue-500 hover:border-blue-500 "
+      class="w-full p-3 mt-4 text-sm text-gray-900 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring-blue-500 focus:border-blue-500 hover:ring-blue-500 hover:border-blue-500 "
       >
   
     <div slot="item" let:item={item} let:label={label} class="flex flex-row">
@@ -268,7 +270,7 @@
     </AutoComplete>
   
     
-  <button type="submit" on:click={addMovieToList} class="text-white m-2 focus:ring-4 font-medium rounded-lg text-sm px-4 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Add</button>
+  <button type="submit" on:click={addMovieToList} class="btn btn-primary mt-4 ml-4">Add</button>
   </div>
   {/if}
   </section>
@@ -295,7 +297,7 @@
 </div>
 
 
-    <div class="container mx-auto px-5 py-2 lg:px-32 lg:pt-12">
+    <div class="container mx-auto px-5 py-2 lg:px-32 lg:pt-6">
   
       
       <!-- ignore error for ondragover="return false"-->
@@ -371,8 +373,7 @@
     }
   
     .autocomplete-wrapper :global(.autocomplete) {
-      width: 500px;
-
+      width: 510px;
     }
   
     .autocomplete-wrapper :global(.autocomplete-list) {
