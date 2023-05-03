@@ -239,26 +239,65 @@
     //     draggable = true;
     // }
 </script>
-  
+
 <section class="body-font bg-gray-900 container mx-auto px-5 lg:px-32 lg:pt-6">
+
   
   {#if viewing}
-    <div class="flex ">
-      <h1 class="text-5xl tracking-wide">{playlistName}</h1>
+    <div class="flex">
+      <h1 class="text-5xl tracking-wide grow">{playlistName}</h1>
+
+      <div class="mt-2">
+        {#if editing}
+          <button class="btn btn-primary btn-sm ml-2" on:click={addPlaylist}>Save</button>
+          <button class="btn btn-primary btn-sm ml-2" on:click={cancelEdit}>Cancel</button>
+        {/if}
+
+        {#if creating}
+          <button class="btn btn-primary btn-sm ml-2" on:click={addPlaylist}>Create</button>
+
+        {/if}
+
+        {#if viewing && data.user}
+          <button class="btn btn-primary btn-sm ml-2" on:click={startEditing}>Edit</button>
+        {/if}
+        <label for="my-modal-3" class="btn btn-primary btn-sm ml-2">Share</label>
+      </div>
     </div>
   {/if}
   
   {#if creating || editing}
-    <label for="listTitle" class="label font-medium">
-    <span class="font-medium">List Title</span>
-    </label>
-    <input type="text" id="listTitle" required={true} placeholder="List Name" class="input input-bordered w-full max-w-lg" bind:value={playlistName}>
+    <div class="flex flex-row">
+      <div class="grow mr-2">
+        <label for="listTitle" class="label font-medium">
+        <span class="font-medium">List Title</span>
+        </label>
+        <input type="text" id="listTitle" required={true} placeholder="List Name" class="input input-bordered w-full max-w-xl" bind:value={playlistName}>
+      </div>
 
-    <label for="listTitle" class="label font-medium">
-    <span class="font-medium">Description</span>
-    </label>
-    <textarea name="Description" id="" cols="10" rows="5" placeholder="Description" class="input input-bordered w-full max-w-lg" bind:value={descriptionText}></textarea>
-    
+      <div class="grow">
+        <label for="listTitle" class="label font-medium">
+        <span class="font-medium">Description</span>
+        </label>
+        <textarea name="Description" id="" cols="30" rows="5" placeholder="Description" class="input input-bordered w-full max-w-xl" bind:value={descriptionText}></textarea>
+      </div>
+
+      <div class="mt-12">
+        {#if editing}
+          <button class="btn btn-primary btn-sm ml-2 mb-1" on:click={addPlaylist}>Save</button>
+          <button class="btn btn-primary btn-sm ml-2 mb-1" on:click={cancelEdit}>Cancel</button>
+        {/if}
+
+        {#if creating}
+          <button class="btn btn-primary btn-sm ml-2 mb-1" on:click={addPlaylist}>Create</button>
+
+        {/if}
+
+        {#if viewing && data.user}
+          <button class="btn btn-primary btn-sm ml-2 mb-1" on:click={startEditing}>Edit</button>
+        {/if}
+      </div>
+    </div>
   
   <div class="autocomplete-wrapper flex">
     <AutoComplete
@@ -287,26 +326,7 @@
   {/if}
   </section>
 
-<div class="absolute">
-  <div class="flex flex-wrap -m-4">
-    <div class="flex flex-col">
-      {#if editing}
-        <button class="btn btn-primary my-2" on:click={addPlaylist}>Save</button>
-        <button class="btn btn-primary my-2" on:click={cancelEdit}>Cancel</button>
-      {/if}
 
-      {#if creating}
-        <button class="btn btn-primary my-2" on:click={addPlaylist}>Create</button>
-
-      {/if}
-
-      {#if viewing && data.user}
-        <button class="btn btn-primary my-2" on:click={startEditing}>Edit</button>
-      {/if}
-        <label for="my-modal-3" class="btn btn-primary my-2">Share</label>
-    </div>
-  </div>
-</div>
 
 
     <div class="container mx-auto px-5 py-2 lg:px-32 lg:pt-6">

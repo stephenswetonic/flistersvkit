@@ -77,12 +77,8 @@
     {/if}
   </div>
 
-
     <div class="flex flex-wrap -m-4">
-        
         {#each playlists as playlist}
-        
-          
             <div class="p-2 relative transition duration-200 hover:scale-105 max-w-sm">
                 <div on:click={() => selectPlaylist(playlist)} on:keypress={() => selectPlaylist(playlist)} class="bg-gray-800 p-6 bg-opacity-40 rounded-lg cursor-pointer">
                     {#if data.user}
