@@ -31,6 +31,7 @@
     let linkCopiedAlert = false;
 
     async function addPlaylist() {
+        console.log(movieList);
         const response = await fetch('/playlist/add', {
         method: 'POST',
         body: JSON.stringify({ movieList, playlistName, descriptionText, creating, playlistId }),
@@ -47,7 +48,7 @@
       viewing = true;
 
       changeIsNewState();
-      deleteMovies();
+      await deleteMovies();
       routeToPage((`playlist/${slugArr[0]}/${playlistId}`), true);
       
     }
