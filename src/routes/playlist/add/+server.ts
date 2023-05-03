@@ -42,6 +42,5 @@ export const POST = (async ({ request, locals }) => {
       console.log(err);
   }
 
-  console.log(newPlaylistId);
   return json({playlistId: newPlaylistId});
 }) satisfies RequestHandler;

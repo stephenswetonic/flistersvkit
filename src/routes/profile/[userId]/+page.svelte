@@ -18,11 +18,11 @@
 	  const title = data.name + '\'s Flister Profile';
 
     function newPlaylist() {
-        routeToPage((`playlist/${userId}/new`), false);
+        routeToPage((`playlist/${userId}/new`), true);
     };
 
     function selectPlaylist(playlist) {
-        routeToPage((`playlist/${userId}/${playlist.id}`), true);
+        routeToPage((`playlist/${userId}/${playlist.id}`), false);
     }
 
     function routeToPage(route: string, replaceState: boolean) {

@@ -4,11 +4,13 @@
     import type { PageData } from './$types';
     import {flip} from 'svelte/animate';
     import {fade} from 'svelte/transition';
+    import { afterNavigate } from '$app/navigation';
     import AutoComplete from "simple-svelte-autocomplete"
     import { Email, Reddit, Telegram, Tumblr, Facebook, Twitter } from 'svelte-share-buttons-component';
     import { PUBLIC_TMDB_KEY} from '$env/static/public';
 
     let playlistName : string;
+    let descriptionText : string;
     let hovering : any = false;
     let movieList = [];
     let moviesToDelete = [];
@@ -24,7 +26,6 @@
     let playlistId = slugArr[1];
     
     let posterWidth = 25;
-    let descriptionText = data.playlist.description;
 
     const url = $page.url;
     let linkCopiedAlert = false;
@@ -44,10 +45,11 @@
       editing = false;
       draggable = false;
       viewing = true;
+
       changeIsNewState();
       deleteMovies();
-
       routeToPage((`playlist/${slugArr[0]}/${playlistId}`), true);
+      
     }
   
     // Sets ui movielist to reflect db state
@@ -62,9 +64,6 @@
       goto(`/${route}`, {replaceState, invalidateAll : true}); 
     }
 
-    function printPlaylistId() {
-      console.log(playlistId);
-    }
   
     // Drag and drop
     const drop = (event, target) => {
@@ -110,7 +109,7 @@
       viewing = false;
       creating = false;
 
-      playlistId = slugArr[1];
+      //playlistId = slugArr[1];
       playlistName = data.playlist.name;
     }
   
@@ -123,7 +122,7 @@
       playlistName = data.playlist.name;
       movieList = [];
       updatePosterWidth();
-      addMoviesToList();
+      refreshMovieList();
     }
   
     // Removes a movie from the ui and deletes the record,
@@ -171,7 +170,8 @@
     }
   
     // Adds movies from a playlist to the ui
-    async function addMoviesToList() {
+    async function refreshMovieList() {
+      movieList = [];
       for (var i = 0; i < data.movies.length; i++) {
         movieList.push({"recordid" : data.movies[i].id, "title" : data.movies[i].title, "id" : data.movies[i].rank-1, "img": data.movies[i].poster, "imdbid" : data.movies[i].imdbid, "isNew" : false})
       }
@@ -210,20 +210,33 @@
     function hideLinkCopiedAlert() {
         linkCopiedAlert = false;
     }
+
+    afterNavigate(() => {
+      if (data.movies.length > 0) {
+        refreshMovieList();
+        playlistName = data.playlist.name;
+        descriptionText = data.playlist.description;
+        viewing = true;
+
+    } else {
+        creating = true;
+        draggable = true;
+    }
+    })
   
     // If loading a playlist that already exists, 
     // fill the ui with that data. Otherwise start in 
     // create mode.
-    if (data.movies.length > 0) {
-        addMoviesToList();
-        playlistName = data.playlist.name;
-        viewing = true;
+    // if (data.movies.length > 0) {
+    //     addMoviesToList();
+    //     playlistName = data.playlist.name;
+    //     descriptionText = data.playlist.description;
+    //     viewing = true;
 
-    } else {
-        console.log("default creating mode");
-        creating = true;
-        draggable = true;
-    }
+    // } else {
+    //     creating = true;
+    //     draggable = true;
+    // }
 </script>
   
 <section class="body-font bg-gray-900 container mx-auto px-5 lg:px-32 lg:pt-6">
@@ -312,8 +325,8 @@
             ondragover="return false"
             on:dragenter={() => hovering = index}
             class:is-active={hovering === index}
-            out:fade={{duration : 500}}
-            in:fade={{duration : 500}}
+            out:fade={{duration : 100}}
+            in:fade={{duration : 300}}
             >
 
             <!-- svelte-ignore a11y-mouse-events-have-key-events -->
