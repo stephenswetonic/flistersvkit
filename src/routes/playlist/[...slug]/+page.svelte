@@ -3,12 +3,10 @@
     import { page } from '$app/stores';
     import type { PageData } from './$types';
     import {flip} from 'svelte/animate';
-    import {fly, fade} from 'svelte/transition';
+    import {fade} from 'svelte/transition';
     import AutoComplete from "simple-svelte-autocomplete"
-    import Input from '$lib/components/Input.svelte';
     import { Email, Reddit, Telegram, Tumblr, Facebook, Twitter } from 'svelte-share-buttons-component';
     import { PUBLIC_TMDB_KEY} from '$env/static/public';
-    import Lazy from "svelte-lazy"
 
     let playlistName : string;
     let hovering : any = false;
@@ -26,7 +24,7 @@
     let playlistId = slugArr[1];
     
     let posterWidth = 25;
-    let descriptionText : string;
+    let descriptionText = data.playlist.description;
 
     const url = $page.url;
     let linkCopiedAlert = false;
@@ -34,7 +32,7 @@
     async function addPlaylist() {
         const response = await fetch('/playlist/add', {
         method: 'POST',
-        body: JSON.stringify({ movieList, playlistName, creating, playlistId }),
+        body: JSON.stringify({ movieList, playlistName, descriptionText, creating, playlistId }),
         headers: {
           'content-type': 'application/json'
         }

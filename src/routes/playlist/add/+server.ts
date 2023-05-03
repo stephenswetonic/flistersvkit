@@ -22,12 +22,13 @@ async function createMovies(playlistId : string, movieList, pb) {
 };
  
 export const POST = (async ({ request, locals }) => {
-  const { movieList, playlistName, creating, playlistId } = await request.json();
+  const { movieList, playlistName, descriptionText, creating, playlistId } = await request.json();
   let newPlaylistId = playlistId;
   try {
     const record = {
         "name": playlistName,
-        "user": locals.user.id
+        "user": locals.user.id,
+        "description": descriptionText
     };
     if (creating) {
       const createdPlaylist = await locals.pb.collection('playlists').create(record);

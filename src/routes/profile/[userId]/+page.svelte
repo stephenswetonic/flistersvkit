@@ -83,7 +83,7 @@
         {#each playlists as playlist}
         
           
-            <div class="p-2 relative transition duration-200 hover:scale-105">
+            <div class="p-2 relative transition duration-200 hover:scale-105 max-w-sm">
                 <div on:click={() => selectPlaylist(playlist)} on:keypress={() => selectPlaylist(playlist)} class="bg-gray-800 p-6 bg-opacity-40 rounded-lg cursor-pointer">
                     {#if data.user}
                     <button class="btn btn-sm btn-ghost absolute top-4 right-4" on:click|stopPropagation={()=> setPlaylistToDelete(playlist.id)}>
@@ -96,7 +96,7 @@
                       {/each}
                     </div>
                     <h2 class="text-lg text-white font-medium title-font mb-4">{playlist.name}</h2>
-                    <p class="leading-relaxed text-base">Description</p>
+                    <p class="leading-relaxed text-base truncate">{playlist.description}</p>
                 </div>
             </div>
         {/each}
