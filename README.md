@@ -2,15 +2,15 @@
 The film lister! Half passion project, half excuse to learn new tech.
 
 ### Examples
-![Home Page](/flistersvkit/readme/home.png)
+![Home Page](/readme/home.png)
 
-![Profile](/flistersvkit/readme/profile.png)
+![Profile](/readme/profile.png)
 
-![List Creation](/flistersvkit/readme/list.png)
+![List Creation](/readme/list.png)
 
-![Search through IMDB Titles](/flistersvkit/readme/search.png)
+![Search through IMDB Titles](/readme/search.png)
 
-![Share Profile or List](/flistersvkit/readme/share.png)
+![Share Profile or List](/readme/share.png)
 
 ### Tech
 - SvelteKit
