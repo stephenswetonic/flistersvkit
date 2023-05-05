@@ -1,5 +1,6 @@
 # Flister
 The film lister! Half passion project, half excuse to learn new tech.
+Currently deployed on Linode and Vercel, soon to be publicly available.
 
 ### Examples
 #### Home Page
@@ -23,4 +24,5 @@ The film lister! Half passion project, half excuse to learn new tech.
 - Typescript
 - TailwindCSS
 - DaisyUI
+
 
