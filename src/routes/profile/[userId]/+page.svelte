@@ -4,6 +4,7 @@
 
     //import type { PageData } from './$types';
     import { fade } from 'svelte/transition';
+    import Image from '$lib/components/Image.svelte';
     import { Email, Reddit, Telegram, Tumblr, Facebook, Twitter } from 'svelte-share-buttons-component';
 
     //From +page.server.ts
@@ -88,7 +89,9 @@
                     {/if}
                     <div class="grid grid-cols-1 mb-2">
                       {#each playlist.thumbnailImgs as thumbnailImg}
-                        <img src={thumbnailImg.img} class="xl:max-h-[300px] md:max-h-[150px] max-h-[100px] rounded col-start-1 row-start-1" style="margin-left: {thumbnailImg.index*40}px;" alt="thumbnail">
+                      <div class="col-start-1 row-start-1" style="margin-left: {thumbnailImg.index*40}px;">
+                        <Image src={thumbnailImg.img} imgclass="xl:max-h-[300px] md:max-h-[150px] max-h-[100px] rounded" draggable={false}/>
+                      </div>
                       {/each}
                     </div>
                     <h2 class="text-lg text-white font-medium title-font mb-4">{playlist.name}</h2>
