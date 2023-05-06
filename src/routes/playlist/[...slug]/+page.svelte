@@ -299,7 +299,7 @@
       </div>
     </div>
   
-  <div class="autocomplete-wrapper flex">
+  <div class="autocomplete-wrapper">
     <AutoComplete
       searchFunction="{getSearchItems}"
       delay="0"
@@ -310,7 +310,7 @@
       valueFieldName="id"
       bind:selectedItem="{selectedMovie}"
       placeholder="Search Movies..."
-      class="w-full p-3 mt-4 text-sm text-gray-900 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring-blue-500 focus:border-blue-500 hover:ring-blue-500 hover:border-blue-500 "
+      class="w-full p-3 mt-4 text-sm text-gray-900 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring-blue-500 focus:border-blue-500 hover:ring-blue-500 hover:border-blue-500"
       >
   
     <div slot="item" let:item={item} let:label={label} class="flex flex-row">
@@ -409,7 +409,7 @@
     }
   
     .autocomplete-wrapper :global(.autocomplete-list) {
-      max-height: 500px;
+      top : 0px !important;
       --tw-bg-opacity: 1;
       background-color: rgb(31 41 55 / var(--tw-bg-opacity));
     }
