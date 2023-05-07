@@ -4,6 +4,7 @@
   import { fade } from 'svelte/transition';
 
   export let data;
+  let divElement;
   let items = [];
   let newListLink;
 
