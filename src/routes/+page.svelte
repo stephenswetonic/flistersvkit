@@ -18,6 +18,8 @@
     shuffleArray(movieIds);
     loadMore();
 
+    //test deploy
+
     // Add 20 items.
     async function loadMore() {
         movieIndex++;
