@@ -11,9 +11,6 @@ export const load = (async ({ locals, params }) => {
         }
     }
     
-
-
-
     if (locals.user) {
         try {
             return {
@@ -24,6 +21,7 @@ export const load = (async ({ locals, params }) => {
             }
         } catch(err) {
             console.log(err);
+            return {error : err};
         }
     }
 
@@ -36,5 +34,6 @@ export const load = (async ({ locals, params }) => {
         }
     } catch(err) {
         console.log(err);
+        return {error : err};
     }
 }) satisfies PageServerLoad;
