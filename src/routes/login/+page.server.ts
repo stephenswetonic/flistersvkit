@@ -6,7 +6,6 @@ import type { Actions } from './$types';
 export const actions: Actions = {
     login: async ({ request, locals}) => {
         const { formData, errors } = await validateData(await request.formData(), loginUserSchema);
-        console.log(errors);
 
         if (errors) {
             return fail(400, {
@@ -16,16 +15,13 @@ export const actions: Actions = {
         }
 
         try {
-            await locals.pb.collection('users').authWithPassword(formData.email, formData.password);
-            
+            await locals.pb.collection('users').authWithPassword(formData.email, formData.password);        
             if (!locals.pb?.authStore?.model?.verified) {
-                console.log("not verified")
                 locals.pb.authStore.clear();
                 return fail(400, {notVerified : true})
 
             }
         } catch(err) {
-            console.log("error after try");
             console.log(err);
             return fail(400, {invalid : true})
         }
