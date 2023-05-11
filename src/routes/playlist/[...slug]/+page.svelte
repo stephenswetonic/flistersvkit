@@ -8,7 +8,7 @@
     import AutoComplete from "simple-svelte-autocomplete"
     import { Email, Reddit, Telegram, Tumblr, Facebook, Twitter } from 'svelte-share-buttons-component';
     import { PUBLIC_TMDB_KEY} from '$env/static/public';
-    import Lazy from "svelte-lazy";
+    import Image from '$lib/components/Image.svelte';
 
     let playlistName : string;
     let descriptionText : string;
@@ -338,11 +338,9 @@
 
             <!-- svelte-ignore a11y-mouse-events-have-key-events -->
             <div class="w-full p-1 relative inline" class:movie-hover={true}>
-              <Lazy height={400} fadeOption={{delay : 0, duration : 500}}>
-                <img src={n.img} alt="poster" 
-                class="h-full w-full rounded-lg object-cover object-center" 
-                draggable={false}>
-              </Lazy>
+              <Image src={n.img} imgclass="h-full w-full rounded-lg object-cover object-center" draggable={false}>
+
+              </Image>
               <p class="font-bold text-3xl absolute top-2 left-2"> {index+1}</p>
               {#if editing || creating}
                 <button on:click={() => removeMovieFromList(index)} class="opacity-0 btn btn-sm btn-ghost absolute top-3 right-3">

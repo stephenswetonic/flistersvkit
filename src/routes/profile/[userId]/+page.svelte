@@ -1,8 +1,6 @@
 <script lang="ts">
     import { goto } from '$app/navigation';
     import { page } from '$app/stores';
-
-    //import type { PageData } from './$types';
     import { fade } from 'svelte/transition';
     import Image from '$lib/components/Image.svelte';
     import { Email, Reddit, Telegram, Tumblr, Facebook, Twitter } from 'svelte-share-buttons-component';
@@ -60,10 +58,9 @@
     function setPlaylistToDelete(playlistId) {
       isModalOpen = true;
       playlistIdToDelete = playlistId;
-      console.log(playlistIdToDelete);
+
     }
 
-    console.log(data.playlists);
 
 </script>
 
