@@ -8,6 +8,7 @@
     import AutoComplete from "simple-svelte-autocomplete"
     import { Email, Reddit, Telegram, Tumblr, Facebook, Twitter } from 'svelte-share-buttons-component';
     import { PUBLIC_TMDB_KEY} from '$env/static/public';
+    import Lazy from "svelte-lazy";
 
     let playlistName : string;
     let descriptionText : string;
@@ -225,19 +226,6 @@
     }
     })
   
-    // If loading a playlist that already exists, 
-    // fill the ui with that data. Otherwise start in 
-    // create mode.
-    // if (data.movies.length > 0) {
-    //     addMoviesToList();
-    //     playlistName = data.playlist.name;
-    //     descriptionText = data.playlist.description;
-    //     viewing = true;
-
-    // } else {
-    //     creating = true;
-    //     draggable = true;
-    // }
 </script>
 
 <section class="body-font bg-gray-900 container mx-auto px-5 lg:px-32 lg:pt-6">
@@ -346,13 +334,15 @@
             ondragover="return false"
             on:dragenter={() => hovering = index}
             class:is-active={hovering === index}
-            out:fade={{duration : 100}}
-            in:fade={{duration : 300}}
             >
 
             <!-- svelte-ignore a11y-mouse-events-have-key-events -->
             <div class="w-full p-1 relative inline" class:movie-hover={true}>
-              <img src={n.img} alt="poster" class="h-full w-full rounded-lg object-cover object-center" draggable={false}>
+              <Lazy height={400} fadeOption={{delay : 0, duration : 500}}>
+                <img src={n.img} alt="poster" 
+                class="h-full w-full rounded-lg object-cover object-center" 
+                draggable={false}>
+              </Lazy>
               <p class="font-bold text-3xl absolute top-2 left-2"> {index+1}</p>
               {#if editing || creating}
                 <button on:click={() => removeMovieFromList(index)} class="opacity-0 btn btn-sm btn-ghost absolute top-3 right-3">
@@ -370,7 +360,7 @@
     <div class="modal">
       <div class="modal-box relative">
         <label for="my-modal-3" class="btn btn-sm btn-circle absolute right-2 top-2">✕</label>
-        <h3 class="mt-2 mb-5 text-center text-3xl font-bold tracking-light text-base-content">Share your profile</h3>
+        <h3 class="mt-2 mb-5 text-center text-3xl font-bold tracking-light text-base-content">Share your list</h3>
         <div class="flex flex-row justify-evenly">
           <Email subject={playlistName} body="{url} {url}"/>
           <Reddit class="share-button" title={playlistName} {url} />
