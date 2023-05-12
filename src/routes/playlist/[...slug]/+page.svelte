@@ -167,8 +167,6 @@
         const response = await fetch(url);
         const json = await response.json();
         return json.results;
-
-
     }
   
     // Adds movies from a playlist to the ui
@@ -287,21 +285,25 @@
       </div>
     </div>
   
-  <div class="autocomplete-wrapper">
+  
+  
+  <div class="autocomplete-wrapper flex flex-row">
     <AutoComplete
       searchFunction="{getSearchItems}"
       delay="0"
       localFiltering={false}
-      showLoadingIndicator={true}
       matchAllKeywords={false}
+      hideArrow={true}
+      showClear={true}
       labelFieldName="original_title"
       valueFieldName="id"
       bind:selectedItem="{selectedMovie}"
+      onChange={addMovieToList}
       placeholder="Search Movies..."
       class="w-full p-3 mt-4 text-sm text-gray-900 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring-blue-500 focus:border-blue-500 hover:ring-blue-500 hover:border-blue-500"
       >
   
-    <div slot="item" let:item={item} let:label={label} class="flex flex-row">
+    <div slot="item" let:item={item} let:label={label} class="flex flex-row" >
         <img src={`https://image.tmdb.org/t/p/original${item.poster_path}?api_key=${PUBLIC_TMDB_KEY}`} alt="thumbnail" style="max-width: 100px; height: auto;">
         <div class="text-white pl-6 text-lg font-medium">{@html label}</div>
     </div>
@@ -309,8 +311,9 @@
     </AutoComplete>
   
     
-  <button type="submit" on:click={addMovieToList} class="btn btn-primary mt-4 ml-4">Add</button>
-  </div>
+    <button type="submit" on:click={addMovieToList} class="btn btn-primary mt-4 ml-4">Add</button>
+
+    </div>
   {/if}
   </section>
 
@@ -391,9 +394,13 @@
       background-color: #3273dc;
       color: #fff;
     }
+
+    .autocomplete-wrapper {
+      max-width: 545px;
+    }
   
     .autocomplete-wrapper :global(.autocomplete) {
-      width: 510px;
+      flex-grow: 1;
     }
   
     .autocomplete-wrapper :global(.autocomplete-list) {
@@ -411,6 +418,10 @@
     .autocomplete-wrapper :global(.autocomplete-list-item.selected) {
       --tw-bg-opacity: 1 !important;
       background-color: rgb(55 65 81 / var(--tw-bg-opacity)) !important;
+    }
+
+    .autocomplete-wrapper :global(.autocomplete-clear-button) {
+      margin-top: 20px;
     }
 
     .movie-hover:hover > button {
