@@ -9,6 +9,7 @@
     import { Email, Reddit, Telegram, Tumblr, Facebook, Twitter } from 'svelte-share-buttons-component';
     import { PUBLIC_TMDB_KEY} from '$env/static/public';
     import Image from '$lib/components/Image.svelte';
+    import MovieCard from '$lib/components/MovieCard.svelte';
 
     let playlistName : string;
     let descriptionText : string;
@@ -30,6 +31,10 @@
 
     const url = $page.url;
     let linkCopiedAlert = false;
+
+    let movieCardId = 0;
+    let movieCardImg = '';
+    let showMovieCard = false;
 
     async function addPlaylist() {
         console.log(movieList);
@@ -211,6 +216,13 @@
         linkCopiedAlert = false;
     }
 
+    function clickedPoster(id, img) {
+      console.log(id);
+      movieCardId = id;
+      movieCardImg = img;
+      showMovieCard = true;
+    }
+
     afterNavigate(() => {
       if (data.movies.length > 0) {
         refreshMovieList();
@@ -286,7 +298,6 @@
     </div>
   
   
-  
   <div class="autocomplete-wrapper flex flex-row">
     <AutoComplete
       searchFunction="{getSearchItems}"
@@ -326,9 +337,10 @@
       <!-- ignore error for ondragover="return false"-->
       <div class="-m-1 flex flex-wrap md:-m-2">
         {#each movieList as n, index  (n.id)}
+          <!-- svelte-ignore a11y-click-events-have-key-events -->
           <div
             id="list-item"
-            class="flex flex-wrap"
+            class="flex flex-wrap cursor-pointer"
             style="width: {posterWidth}%;"
             animate:flip="{{duration: 500}}"
             draggable={draggable} 
@@ -336,6 +348,7 @@
             on:drop|preventDefault={event => drop(event, index)}
             ondragover="return false"
             on:dragenter={() => hovering = index}
+            on:click={() => clickedPoster(n.imdbid, n.img)}
             class:is-active={hovering === index}
             >
 
@@ -356,6 +369,10 @@
         {/each}
       </div>
     </div>
+
+    {#if showMovieCard}
+    <MovieCard bind:showCard={showMovieCard} bind:id={movieCardId} bind:poster_path={movieCardImg}/>
+    {/if}
 
     <input type="checkbox" id="my-modal-3" class="modal-toggle" />
     <div class="modal">

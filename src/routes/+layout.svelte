@@ -9,7 +9,7 @@
   
 </script>
 
-<div class="min-h-full">
+<div class="min-h-screen">
   <nav class="navbar bg-base-100 border-b">
     <div class="flex-1">
       <a href="/" class="btn btn-ghost normal-case text-xl">Flister</a>
@@ -52,3 +52,5 @@
     </div>
 
 </div>
+
+

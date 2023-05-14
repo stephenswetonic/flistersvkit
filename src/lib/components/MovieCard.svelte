@@ -4,20 +4,20 @@
     export let id;
     import {PUBLIC_TMDB_KEY} from '$env/static/public';
     import Image from './Image.svelte';
+    import StreamCard from './StreamCard.svelte';
     import { onMount } from "svelte";
 
     let movieData = {};
-    let watchProvidersUS = {rent : [], buy : [], flatrate : []};
     let movieCredits = {cast : [], crew : []};
     let director = [];
     let producers = [];
     let editors = [];
     let musicComposers = [];
+    let genres = [];
 	let dialog; // HTMLDialogElement
 
     let tabs = [
 		"Genres",
-		"Cast",
 		"Crew",
 	]
 	let activeTab = 1
@@ -28,16 +28,11 @@
         const response = await fetch(url);
         const data = await response.json();
 
-        const watchUrl = "https://api.themoviedb.org/3/movie/" + id + "/watch/providers" + "?api_key=" + PUBLIC_TMDB_KEY;
-        const watchResponse = await fetch(watchUrl);
-        const watchData = await watchResponse.json();
-
         const creditsURL = "https://api.themoviedb.org/3/movie/" + id + "/credits" + "?api_key=" + PUBLIC_TMDB_KEY;
         const creditsReponse = await fetch(creditsURL);
         const creditsData = await creditsReponse.json();
 
         movieData = data;
-        watchProvidersUS = watchData.results.US;
         movieCredits = creditsData;
 
         const crewJobs = groupBy(movieCredits.crew, 'job');
@@ -45,8 +40,11 @@
         producers = crewJobs.Producer;
         editors = crewJobs.Editor;
         musicComposers = crewJobs['Original Music Composer'];
+        genres = movieData.genres;
 
-        console.log(movieData);
+        // console.log(movieData);
+        // console.log(movieCredits)
+
     })
 
     function getLongDate(date) {
@@ -97,7 +95,7 @@
         <div class="flex">
             <div class="w-1/3">
                 <Image src={poster_path} imgclass='w-full rounded-lg object-cover object-center' draggable={false}/>
-                <div class="stats shadow w-full">
+                <div class="stats shadow overflow-visible block">
                     <div class="stat">
                         <div class="stat-figure text-secondary">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="inline-block w-8 h-8 stroke-current"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
@@ -117,25 +115,24 @@
             </div>
  
             
-            <div class="w-2/3">
-                <h1 class="my-2 text-3xl font-bold tracking-light text-base-content">{movieData.original_title}</h1>
+            <div class="w-2/3 ml-6">
+                <h1 class="my-2 text-3xl font-bold tracking-light text-base-content mb-6">{movieData.original_title}</h1>
                 <hr>
-                <p class="text-base-content">{movieData.overview}</p>
+                <p class="text-base-content mb-2">{movieData.overview}</p>
                 <p class="text-base-content font-medium">Release Date: <span class="font-light">{getLongDate(movieData.release_date)}</span></p>
-                <p class="text-base-content font-medium">Runtime: <span class="font-light">{secondsToHms(movieData.runtime)}</span></p>
+                <p class="text-base-content font-medium mb-2">Runtime: <span class="font-light">{secondsToHms(movieData.runtime)}</span></p>
 
                 <div class="tabs">
                     {#each tabs as tab, index}
-                      <button class="tab tab-bordered w-1/3" class:tab-active={activeTab == index} on:click={()=>activeTab = index}>{tab}</button>
+                      <button class="tab tab-bordered text-base-content text-xl w-1/2" class:tab-active={activeTab == index} on:click={()=>activeTab = index}>{tab}</button>
                     {/each}
                 </div>
                 <div class="card" class:hidden={activeTab != 0}>
-                    Content 1
+                    {#each genres as genre}
+                        <p class="text-base-content font-medium tracking-wide my-2">{genre.name}</p>
+                    {/each}
                 </div>
                 <div class="card" class:hidden={activeTab != 1}>
-                    Content 2
-                </div>
-                <div class="card ml-6" class:hidden={activeTab != 2}>
                     <p class="text-base-content font-medium tracking-wide my-2">Director</p>
                     {#each director as dir}
                         <p class="font-light">{dir.name}</p>
@@ -154,13 +151,10 @@
                     {/each}
                 </div>
 
-                <h1>Streaming Providers</h1>
-                <p>Rent</p>
-                <ul>
-                {#each watchProvidersUS.rent as provider} 
-                    <li>{provider.provider_name}</li>
-                {/each}
-                </ul>
+                <div class="mt-2">
+                <StreamCard {id}/>
+                </div>
+                
             </div>
 
         </div>

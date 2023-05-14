@@ -73,8 +73,8 @@
     </ul>
   </div>
 
-  <div class="container mx-auto px-5 py-2 lg:px-32 lg:pt-12" id="collage">
-    <div class="-m-1 flex flex-wrap md:-m-2 justify-center">
+  <div class="container mx-auto px-5 lg:px-32 lg:pt-12" id="collage">
+    <div class="flex flex-wrap justify-center">
         {#each items as item}
 
             <Lazy height={400} class="p-1 shrink">
@@ -89,7 +89,7 @@
 <style>
     .homebody {
           /* We need to limit the height and show a scrollbar */
-          height: 800px;
+          height: 100vh;
           overflow: auto;
 
           -ms-overflow-style: none;  /* IE and Edge */
