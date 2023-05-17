@@ -37,7 +37,7 @@
     let showMovieCard = false;
 
     async function addPlaylist() {
-        console.log(movieList);
+
         const response = await fetch('/playlist/add', {
         method: 'POST',
         body: JSON.stringify({ movieList, playlistName, descriptionText, creating, playlistId }),
@@ -52,6 +52,8 @@
       editing = false;
       draggable = false;
       viewing = true;
+
+      selectedMovie = '';
 
       changeIsNewState();
       await deleteMovies();
@@ -100,6 +102,7 @@
     // Adds movie from search box to ui
     async function addMovieToList() {
       // Getting high res poster
+      console.log("added " + selectedMovie.original_title);
       const posterUrl = "https://image.tmdb.org/t/p/original/" + selectedMovie.poster_path + "?api_key=" + PUBLIC_TMDB_KEY;
   
       // Adding to playlist ui. In creating or editing mode,
@@ -309,7 +312,6 @@
       labelFieldName="original_title"
       valueFieldName="id"
       bind:selectedItem="{selectedMovie}"
-      onChange={addMovieToList}
       placeholder="Search Movies..."
       class="w-full p-3 mt-4 text-sm text-gray-900 border border-gray-300 rounded-lg dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white focus:ring-blue-500 focus:border-blue-500 hover:ring-blue-500 hover:border-blue-500"
       >
